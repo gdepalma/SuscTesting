@@ -44,7 +44,7 @@ void ERB(int *minDIA, int *maxDIA, double *MICWithinTwo, double *MICOutsideTwo, 
           idx1=findERBBrkpts(x,y,MICWithinTwo,DIAWithinTwo,*MICBrkpt1,*MICBrkpt2,*N1,*VM1,*M1,*m1,*VM2,*M2,*m2);
         else idx1=0;
         if(*N2>0)
-	  idx2=findERBBrkpts(x,y,MICOutsideTwo,DIAOutsideTwo,*MICBrkpt1,*MICBrkpt2,*N2,*VM1,*M1,*m1,*VM2,*M2,*m2);
+	        idx2=findERBBrkpts(x,y,MICOutsideTwo,DIAOutsideTwo,*MICBrkpt1,*MICBrkpt2,*N2,*VM1,*M1,*m1,*VM2,*M2,*m2);
         else idx2=0;
 //        Rprintf("%d %d %f %f %d %d \n", x,y,idx1+idx2,minVal,*minDIA,*maxDIA);
         if(idx1+idx2<=minVal)

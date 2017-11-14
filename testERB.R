@@ -35,3 +35,9 @@ descriptiveStatOne(MIC,DIA,xcens,ycens,MICBrkpt=0)
 ### Plots
 basicPlotOne(MIC,DIA,xcens,ycens,MICBrkpt,MICXaxis=TRUE,log2MIC=TRUE)
 basicPlot(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,MICXaxis=TRUE,log2MIC=FALSE)
+
+
+### ERB Two Breakpoints
+findBrkptsERB(MIC,DIA,VM1=10,M1=10,m1=40,VM2=2,M2=2,m2=5,MICBrkptL,MICBrkptU,minWidth=4,maxWidth=20)
+
+### ERB One Breakpoint
