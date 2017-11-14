@@ -1,16 +1,16 @@
 #include <stdio.h>
 #include <math.h>
-#include <malloc.h>
+#include <stdlib.h>
 #include <R.h>
 #include <Rmath.h>
 
-double min(double a, double b){
+static double min(double a, double b){
   if(a<b) return a;
   else return b;
 }
 
 
-double pmicTrue(double m,double M1Test,double M2Test,double M1True,double M2True,double e){
+static double pmicTrue(double m,double M1Test,double M2Test,double M1True,double M2True,double e){
   double prob=0;
   
   if (m<=M1True)  prob=pnorm(M1Test,m,e,TRUE,FALSE);
@@ -19,7 +19,7 @@ double pmicTrue(double m,double M1Test,double M2Test,double M1True,double M2True
   return (prob);
 }
 
-double pdia(double d,double m,double D1,double D2,double M1,double M2,double t){
+static double pdia(double d,double m,double D1,double D2,double M1,double M2,double t){
   double prob=0;
 
   if (m<=M1)  prob=1-pnorm(D2-.5,d,t,TRUE,FALSE);
@@ -29,7 +29,7 @@ double pdia(double d,double m,double D1,double D2,double M1,double M2,double t){
   return(prob);
 }
 
-double calcLossTrueMin(double D1,double D2,double *gridx,double *weights,double *f,double M1Test,double M2Test,
+static double calcLossTrueMin(double D1,double D2,double *gridx,double *weights,double *f,double M1Test,double M2Test,
   double M1True, double M2True,double e,double t,int lgrid){
 
   double temp,sum=0;

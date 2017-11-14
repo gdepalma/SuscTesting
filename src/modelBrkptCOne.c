@@ -1,16 +1,16 @@
 #include <stdio.h>
 #include <math.h>
-#include <malloc.h>
+#include <stdlib.h>
 #include <R.h>
 #include <Rmath.h>
 
-double min(double a, double b){
+static double min(double a, double b){
   if(a<b) return a;
   else return b;
 }
 
 
-double pmicTrue(double m,double MTest,double MTrue,double e){
+static double pmicTrue(double m,double MTest,double MTrue,double e){
   double prob=0;
   
   if (m<=MTrue)  prob=pnorm(MTest,m,e,TRUE,FALSE);
@@ -18,7 +18,7 @@ double pmicTrue(double m,double MTest,double MTrue,double e){
   return (prob);
 }
 
-double pdia(double d,double m,double DIABrkpt,double MTrue,double t){
+static double pdia(double d,double m,double DIABrkpt,double MTrue,double t){
   double prob=0;
 
   if (m<=MTrue)  prob=1-pnorm(DIABrkpt-.5,d,t,TRUE,FALSE);
@@ -27,7 +27,7 @@ double pdia(double d,double m,double DIABrkpt,double MTrue,double t){
   return(prob);
 }
 
-double calcLossTrueMin(double DIABrkpt,double *gridx,double *weights,double *f,double MTest,double MTrue,double e,double t,int lgrid){
+static double calcLossTrueMin(double DIABrkpt,double *gridx,double *weights,double *f,double MTest,double MTrue,double e,double t,int lgrid){
 
   double temp,sum=0;
   int i;

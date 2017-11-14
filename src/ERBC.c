@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <math.h>
-#include <malloc.h>
+#include <stdlib.h>
 #include <R.h>
 #include <Rmath.h>
 
@@ -28,15 +28,15 @@ double findERBBrkpts(int D1,int D2,double *MIC, double *DIA,double MICBrkpt1,dou
   return(index);
 }
 
-void ERB(int *minDIA, int *maxDIA, double *MICWithinTwo, double *MICOutsideTwo, double *DIAWithinTwo, double *DIAOutsideTwo, 
-	double *MICBrkpt1, double *MICBrkpt2, int *N1, int *N2, double *VM1, double *M1, double *m1, 
+void ERB(int *minDIA, int *maxDIA, double *MICWithinTwo, double *MICOutsideTwo, double *DIAWithinTwo, double *DIAOutsideTwo,
+	double *MICBrkpt1, double *MICBrkpt2, int *N1, int *N2, double *VM1, double *M1, double *m1,
 	double *VM2, double *M2, double *m2,int *minWidth, int *maxWidth, int *D1, int *D2){
 
   int x, y;
   double minVal=9999;
   double idx1, idx2;
-  *D1=0; *D2=1; 
-  
+  *D1=0; *D2=1;
+
   for(x=*minDIA; x<(*maxDIA-2); x++){
     for(y=(x+1); y<*maxDIA; y++){
       if((y-x)>=*minWidth & (y-x)<=*maxWidth){
@@ -46,13 +46,13 @@ void ERB(int *minDIA, int *maxDIA, double *MICWithinTwo, double *MICOutsideTwo, 
         if(*N2>0)
 	  idx2=findERBBrkpts(x,y,MICOutsideTwo,DIAOutsideTwo,*MICBrkpt1,*MICBrkpt2,*N2,*VM1,*M1,*m1,*VM2,*M2,*m2);
         else idx2=0;
-//        Rprintf("%d %d %f %f %d %d \n", x,y,idx1+idx2,minVal,*minDIA,*maxDIA); 
+//        Rprintf("%d %d %f %f %d %d \n", x,y,idx1+idx2,minVal,*minDIA,*maxDIA);
         if(idx1+idx2<=minVal)
           if(idx1+idx2==minVal){
             if(y-x>=*D2-*D1) {minVal=idx1+idx2; *D1=x; *D2=y;}
           }
           else {minVal=idx1+idx2; *D1=x; *D2=y;}
-      } 
+      }
     }
   }
 
