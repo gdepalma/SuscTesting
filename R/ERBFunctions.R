@@ -99,7 +99,7 @@ ERB=function(D1,D2,MIC,DIA,MICBrkptL,MICBrkptU,VM1,M1,m1,VM2,M2,m2,withinOneVect
 findBrkptsERB=function(MIC,DIA,VM1=10,M1=10,m1=40,VM2=2,M2=2,m2=5,
   MICBrkptL,MICBrkptU,minWidth=4,maxWidth=20){
 
-  VM1=10;M1=10;m1=40;VM2=2;M2=2;m2=5;minWidth=4;maxWidth=20
+  # VM1=10;M1=10;m1=40;VM2=2;M2=2;m2=5;minWidth=4;maxWidth=20
 
   #find optimal
   parms=findBrkptsERBC(MIC,DIA,VM1,M1,m1,VM2,M2,m2,MICBrkptL,MICBrkptU,minWidth,maxWidth)
@@ -141,7 +141,7 @@ findBrkptsERB=function(MIC,DIA,VM1=10,M1=10,m1=40,VM2=2,M2=2,m2=5,
 
 
 ERBGivenDIA=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkptL,DIABrkptU,
-  VM1=10,M1=10,m1=40,VM2=2,M2=2,m2=5,flipGraph=0){
+  VM1=10,M1=10,m1=40,VM2=2,M2=2,m2=5){
 
   MICBrkptL=MICBrkptL
   MICBrkptU=MICBrkptU
@@ -189,7 +189,7 @@ ERBGivenDIA=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkptL,DIABrkptU
 
 
 PlotBrkptsERB2=function(MIC,DIA,xcens,ycens,VM1=10,M1=10,m1=40,VM2=2,M2=2,m2=5,
-                        MICBrkptL,MICBrkptU,minWidth=4,maxWidth=20,flipGraph,logConvert){
+                        MICBrkptL,MICBrkptU,minWidth=4,maxWidth=20,MICXaxis,log2MIC){
 
   MICBrkptL=MICBrkptL
   MICBrkptU=MICBrkptU
@@ -199,23 +199,23 @@ PlotBrkptsERB2=function(MIC,DIA,xcens,ycens,VM1=10,M1=10,m1=40,VM2=2,M2=2,m2=5,
   parms=findBrkptsERBC(MIC,DIA,VM1,M1,m1,VM2,M2,m2,MICBrkptL,MICBrkptU,minWidth,maxWidth)
   D1=parms$D1; D2=parms$D2
 
-  fit=plotBrkPtsERB(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,D1,D2,flipGraph,logConvert)
+  fit=plotBrkPtsERB(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,D1,D2,MICXaxis,log2MIC)
   return(fit)
 }
 
 PlotBrkptsERBGiven=function(MIC,DIA,xcens,ycens,VM1=10,M1=10,m1=40,VM2=2,M2=2,m2=5,
-                        MICBrkptL,MICBrkptU,D1,D2,minWidth=4,maxWidth=20,flipGraph,logConvert){
+                        MICBrkptL,MICBrkptU,D1,D2,minWidth=4,maxWidth=20,MICXaxis,log2MIC){
 
   MICBrkptL=MICBrkptL
   MICBrkptU=MICBrkptU
 
-  fit=plotBrkPtsERB(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,D1,D2,flipGraph,logConvert)
+  fit=plotBrkPtsERB(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,D1,D2,MICXaxis,log2MIC)
   return(fit)
 }
 
 
 #plot single scatterplot
-plotBrkPtsERB=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkpt1,DIABrkpt2,flipGraph,logConvert){
+plotBrkPtsERB=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkpt1,DIABrkpt2,MICXaxis,log2MIC){
 
   MIC1=MIC
   DIA1=DIA
@@ -262,7 +262,7 @@ plotBrkPtsERB=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkpt1,DIABrkp
   a1[,1:3] = apply(a1[,1:3], 2, function(x) as.numeric(x));
   a1$classification=factor(a1$classification,levels=c("Correct", "Minor", "Major","Very Major"))
 
-  if(flipGraph=='Yes' && logConvert==TRUE){
+  if(MICXaxis=='Yes' && log2MIC==TRUE){
     fit=ggplot(a1,aes(MIC,DIA))+geom_text(aes(label=Freq,color=factor(classification)),size=4,show_guide=FALSE)+
       geom_point(aes(group=factor(classification),color=factor(classification)),size=0)+
       geom_vline(xintercept=MICBrkptL,lty=2,alpha=.4)+
@@ -286,7 +286,7 @@ plotBrkPtsERB=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkpt1,DIABrkp
       theme_dbets()
 
   }
-  if(flipGraph=='Yes' && logConvert==FALSE){
+  if(MICXaxis=='Yes' && log2MIC==FALSE){
     MICBrkptL=2^MICBrkptL
     MICBrkptU=2^MICBrkptU
     MIC2=MIC1
@@ -318,7 +318,7 @@ plotBrkPtsERB=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkpt1,DIABrkp
       guides(colour = guide_legend(override.aes = list(size=3,alpha = 1)))+
       theme_dbets()
   }
-  if(flipGraph=='No' && logConvert==TRUE){
+  if(MICXaxis=='No' && log2MIC==TRUE){
     fit=ggplot(a1,aes(DIA,MIC))+geom_text(aes(label=Freq,color=factor(classification)),size=4,show_guide=FALSE)+
       geom_point(aes(group=factor(classification),color=factor(classification)),size=0)+
       geom_hline(yintercept=MICBrkptL,lty=2,alpha=.4)+
@@ -341,7 +341,7 @@ plotBrkPtsERB=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkpt1,DIABrkp
           guides(colour = guide_legend(override.aes = list(size=3,alpha = 1)))+
       theme_dbets()
   }
-  if(flipGraph=='No' && logConvert==FALSE){
+  if(MICXaxis=='No' && log2MIC==FALSE){
     MICBrkptL=2^MICBrkptL
     MICBrkptU=2^MICBrkptU
     MIC2=MIC1

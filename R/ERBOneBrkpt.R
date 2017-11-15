@@ -1,10 +1,10 @@
 
 #calculates index score
 ERBOne=function(DIABrkpt,MIC,DIA,MICBrkpt,VM,M){
-  
+
   temp=max(VM,M)
   VMWeight=temp/VM; MWeight=temp/M
-  
+
   ###outside one intermediate range
   NumSS=0; NumVM=0; NumRR=0; NumM=0
   n=length(MIC)
@@ -18,32 +18,32 @@ ERBOne=function(DIABrkpt,MIC,DIA,MICBrkpt,VM,M){
     #S MIC R DIA
     else if(MIC[i]<=MICBrkpt & DIA[i]<=DIABrkpt) NumM=NumM+1
   }
-  
+
   index=VMWeight*NumVM/n+MWeight*NumM/n
   CorrectCount=sum(NumSS,NumRR)
   CorrectPerc=CorrectCount/n*100
   VMPerc=NumVM/n*100
-  MPerc=NumM/n*100  
-  
+  MPerc=NumM/n*100
+
   return(list(idx=index,CorrectPerc=CorrectPerc,VMPerc=VMPerc,MPerc=MPerc,
               CorrectCount=CorrectCount,VMCount=NumVM,MCount=NumM))
 }
 
 
 #finds optimum DIA given breakpoints M1 and M2 error rate bounded method
-findBrkptsERBOne=function(MIC,DIA,VM,M,MICBrkpt){
-    
+findBrkptsERBOne=function(MIC,DIA,VM=1,M=5,MICBrkpt){
+
   #find optimal
   parms=findBrkptsERBOneC(MIC,DIA,VM,M,MICBrkpt)
-  DIABrkpt=parms$DIABrkpt+.5
-  
+  DIABrkpt=parms$DIABrkpt
+
   #find information for plotting and display information
   N=length(MIC)
-  
+
   cat('Optimal DIA Breakpoint for ERB:',DIABrkpt,'\n')
   cat('Number of Isolates: ',N,'\n')
   temp=matrix(nrow=1,ncol=3)
-  parms=ERBOne(DIABrkpt-.5,MIC,DIA,MICBrkpt,VM,M)
+  parms=ERBOne(DIABrkpt,MIC,DIA,MICBrkpt,VM,M)
   cat('Index Score = ',parms$idx,'\n \n')
   cat('Count (%) \n')
   temp[1,1:3]=c(paste(parms$CorrectCount,' (',round(parms$CorrectPerc,digits=2),')',sep=''),
@@ -60,12 +60,12 @@ findBrkptsERBOne=function(MIC,DIA,VM,M,MICBrkpt){
 
 
 
-ERBGivenDIAOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,VM,M){
-  
-  
+ERBGivenDIAOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,VM=1,M=5){
+
+
   N=length(MIC)
-  
-  cat('Optimal DIA Breakpoint for ERB:',DIABrkpt+.5,'\n')
+
+  cat('Optimal DIA Breakpoint for ERB:',DIABrkpt,'\n')
   cat('Number of Isolates: ',N,'\n')
   temp=matrix(nrow=1,ncol=3)
   parms=ERBOne(DIABrkpt,MIC,DIA,MICBrkpt,VM,M)
@@ -83,28 +83,28 @@ ERBGivenDIAOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,VM,M){
 }
 
 
-PlotBrkptsERB2One=function(MIC,DIA,xcens,ycens,VM,M,MICBrkpt,flipGraph,logConvert){
-  
+PlotBrkptsERB2One=function(MIC,DIA,xcens,ycens,VM,M,MICBrkpt,MICXaxis,log2MIC){
+
 
   parms=findBrkptsERBOneC(MIC,DIA,VM,M,MICBrkpt)
   DIABrkpt=parms$DIABrkpt
-  
-  fit=plotBrkPtsERBOne(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,flipGraph,logConvert)
+
+  fit=plotBrkPtsERBOne(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,MICXaxis,log2MIC)
   return(fit)
 }
 
-PlotBrkptsERBGivenOne=function(MIC,DIA,xcens,ycens,VM,M,MICBrkpt,DIABrkpt,flipGraph,logConvert){
-  
+PlotBrkptsERBGivenOne=function(MIC,DIA,xcens,ycens,VM,M,MICBrkpt,DIABrkpt,MICXaxis,log2MIC){
 
-  fit=plotBrkPtsERBOne(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,flipGraph,logConvert)
-  
+
+  fit=plotBrkPtsERBOne(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,MICXaxis,log2MIC)
+
   return(fit)
 }
 
 
-#plot single scatterplot 
-plotBrkPtsERBOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,flipGraph,logConvert){
-  
+#plot single scatterplot
+plotBrkPtsERBOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,MICXaxis,log2MIC){
+
   MIC1=MIC
   DIA1=DIA
   MIC[xcens==1 & MIC==max(MIC)]=max(MIC)+1
@@ -114,7 +114,7 @@ plotBrkPtsERBOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,flipGraph,logCon
   a1=data.frame(MIC,DIA)
   a1=count(a1,c('MIC','DIA'))
   Freq=a1$freq; MIC=a1$MIC; DIA=a1$DIA
-    
+
   n=length(MIC); classification=rep(NA,n)
   for (i in 1:n){
     #SS
@@ -129,8 +129,8 @@ plotBrkPtsERBOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,flipGraph,logCon
   a1=data.frame(MIC,DIA,Freq,classification,stringsAsFactors=FALSE)
   a1[,1:3] = apply(a1[,1:3], 2, function(x) as.numeric(x));
   a1$classification=factor(a1$classification,levels=c("Correct","Major","Very Major"))
-  
-  if(flipGraph=='Yes' && logConvert==TRUE){
+
+  if(MICXaxis=='Yes' && log2MIC==TRUE){
     fit=ggplot(a1,aes(MIC,DIA))+geom_text(aes(label=Freq,color=factor(classification)),size=4,show_guide=FALSE)+
       geom_point(aes(group=factor(classification),color=factor(classification)),size=0)+
       geom_vline(xintercept=MICBrkpt,lty=2,alpha=.4)+
@@ -150,14 +150,14 @@ plotBrkPtsERBOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,flipGraph,logCon
         legend.text = element_text(size = 14))+
       guides(colour = guide_legend(override.aes = list(size=3,alpha = 1)))
   }
-  if(flipGraph=='Yes' && logConvert==FALSE){
+  if(MICXaxis=='Yes' && log2MIC==FALSE){
     MICBrkpt=2^MICBrkpt
     MIC2=MIC1
     a1$MIC=2^a1$MIC
     MICTemp=c(min(MIC2)-1,min(MIC2):max(MIC2),max(MIC2)+1)
     MICTemp=2^MICTemp
     x=2^(min(MIC2):max(MIC2))
-    
+
     fit=ggplot(a1,aes(MIC,DIA))+geom_text(aes(label=Freq,color=factor(classification)),size=4,show_guide=FALSE)+
       geom_point(aes(group=factor(classification),color=factor(classification)),size=0)+
       geom_vline(xintercept=MICBrkpt,lty=2,alpha=.4)+
@@ -178,7 +178,7 @@ plotBrkPtsERBOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,flipGraph,logCon
         legend.text = element_text(size = 14))+
       guides(colour = guide_legend(override.aes = list(size=3,alpha = 1)))
   }
-  if(flipGraph=='No' && logConvert==TRUE){
+  if(MICXaxis=='No' && log2MIC==TRUE){
     fit=ggplot(a1,aes(DIA,MIC))+geom_text(aes(label=Freq,color=factor(classification)),size=4,show_guide=FALSE)+
       geom_point(aes(group=factor(classification),color=factor(classification)),size=0)+
       geom_hline(yintercept=MICBrkpt,lty=2,alpha=.4)+
@@ -198,14 +198,14 @@ plotBrkPtsERBOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,flipGraph,logCon
         legend.text = element_text(size = 14))+
       guides(colour = guide_legend(override.aes = list(size=3,alpha = 1)))
   }
-  if(flipGraph=='No' && logConvert==FALSE){
+  if(MICXaxis=='No' && log2MIC==FALSE){
     MICBrkpt=2^MICBrkpt
     MIC2=MIC1
     a1$MIC=2^a1$MIC
     MICTemp=c(min(MIC2)-1,min(MIC2):max(MIC2),max(MIC2)+1)
     MICTemp=2^MICTemp
     x=2^(min(MIC2):max(MIC2))
-    
+
     fit=ggplot(a1,aes(DIA,MIC))+geom_text(aes(label=Freq,color=factor(classification)),size=4,show_guide=FALSE)+
       geom_point(aes(group=factor(classification),color=factor(classification)),size=0)+
       geom_hline(yintercept=MICBrkpt,lty=2,alpha=.4)+
@@ -225,21 +225,21 @@ plotBrkPtsERBOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,flipGraph,logCon
         legend.key=element_rect(fill="white",colour="white"),
         legend.text = element_text(size = 14))+
       guides(colour = guide_legend(override.aes = list(size=3,alpha = 1)))
-    
-    
+
+
   }
-  
+
   return(fit)
-  
+
 }
 
 
 bootStrapERBOne=function(MIC,DIA,MICBrkpt,VM,M,session){
-  
+
   #bootstrap
   DIABrkpt<<-rep(NA,12000)
   n=length(MIC)
-  
+
   withProgress(session, min=1, max=12000, {
     setProgress(message = 'Calculation in progress')
     for(i in 1:12000){
@@ -248,13 +248,13 @@ bootStrapERBOne=function(MIC,DIA,MICBrkpt,VM,M,session){
       idx=sample(seq(1,n,by=1),n,replace=T)
       MIC_sam=MIC[idx]
       DIA_sam=DIA[idx]
-      
+
       #get weighted breakpoints
       parms=findBrkptsERBOneC(MIC_sam,DIA_sam,VM,M,MICBrkpt)
       DIABrkpt[i] <<- parms$DIABrkpt+.5
     }
   })
-  
+
 
   #print results
   tab=table(DIABrkpt)
@@ -266,7 +266,7 @@ bootStrapERBOne=function(MIC,DIA,MICBrkpt,VM,M,session){
   a2$CumFreq=cumsum(a2$Freq)
   a2[,2]=round(a2[,2],2)
   a2[,3]=round(a2[,3],2)
-  
+
   cat('Bootstrap samples = 12000 \n')
   cat('\n-------DIA Breakpoints by Confidence--------\n')
   temp=data.frame(DIABrkpt=a2[,1],Percent=a2[,2],Cumulative=a2[,3])
@@ -274,9 +274,9 @@ bootStrapERBOne=function(MIC,DIA,MICBrkpt,VM,M,session){
   name.width <- max(sapply(names(temp), nchar))
   names(temp) <- format(names(temp), width = name.width, justify = "centre")
   print(format(temp, width = name.width, justify = "centre"),row.names=FALSE,quote=FALSE)
-  
+
   invisible()
-  
+
 }
 
 

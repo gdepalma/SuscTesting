@@ -55,7 +55,7 @@ findBrkptsERBOneC=function(MIC,DIA,VM,M,MICBrkpt){
   index=0
   N=length(MIC)
 
-  minDIA=min(DIA)+.5; maxDIA=max(DIA)-.5
+  minDIA=min(DIA)+1; maxDIA=max(DIA)-1
 
   storage.mode(minDIA) <- "double"
   storage.mode(maxDIA) <- "double"

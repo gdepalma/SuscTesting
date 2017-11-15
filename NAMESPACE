@@ -1,3 +1,8 @@
 exportPattern("^[[:alpha:]]+")
-import(ggthemes)
+#' @import ggthemes
+#' @import mixtools
+#' @import tidyverse
+#' @import scales
+
+
 useDynLib(SuscTesting)

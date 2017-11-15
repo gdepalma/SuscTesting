@@ -41,3 +41,7 @@ basicPlot(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,MICXaxis=TRUE,log2MIC=FALSE)
 findBrkptsERB(MIC,DIA,VM1=10,M1=10,m1=40,VM2=2,M2=2,m2=5,MICBrkptL,MICBrkptU,minWidth=4,maxWidth=20)
 
 ### ERB One Breakpoint
+parms=findBrkptsERBOne(MIC,DIA,VM=1,M=5,MICBrkpt)
+DIABrkpt=parms$DIABrkpt
+ERBGivenDIAOne(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,VM=1,M=5)
+
