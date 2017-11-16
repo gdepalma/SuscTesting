@@ -99,7 +99,7 @@ ERB=function(D1,D2,MIC,DIA,MICBrkptL,MICBrkptU,VM1,M1,m1,VM2,M2,m2,withinOneVect
 findBrkptsERB=function(MIC,DIA,VM1=10,M1=10,m1=40,VM2=2,M2=2,m2=5,
   MICBrkptL,MICBrkptU,minWidth=4,maxWidth=20){
 
-  # VM1=10;M1=10;m1=40;VM2=2;M2=2;m2=5;minWidth=4;maxWidth=20
+  VM1=10;M1=10;m1=40;VM2=2;M2=2;m2=5;minWidth=4;maxWidth=20
 
   #find optimal
   parms=findBrkptsERBC(MIC,DIA,VM1,M1,m1,VM2,M2,m2,MICBrkptL,MICBrkptU,minWidth,maxWidth)
@@ -145,10 +145,10 @@ ERBGivenDIA=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkptL,DIABrkptU
 
   MICBrkptL=MICBrkptL
   MICBrkptU=MICBrkptU
-  DIABrkpt1=DIABrkptL
-  DIABrkpt2=DIABrkptU
+  DIABrkptL=DIABrkptL
+  DIABrkptU=DIABrkptU
 
-  D1=DIABrkpt1; D2=DIABrkpt2
+  D1=DIABrkptL; D2=DIABrkptU
 
   if(D2<=D1){
     stop('Lower DIA Breakpoint must be less than Upper DIA Breakpoint.')
@@ -215,7 +215,10 @@ PlotBrkptsERBGiven=function(MIC,DIA,xcens,ycens,VM1=10,M1=10,m1=40,VM2=2,M2=2,m2
 
 
 #plot single scatterplot
-plotBrkPtsERB=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkpt1,DIABrkpt2,MICXaxis,log2MIC){
+plotBrkPtsERB=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkptL,DIABrkptU,MICXaxis,log2MIC){
+
+  M1=MICBrkptL; M2=MICBrkptU
+  D1=DIABrkptL; D2=DIABrkptU
 
   MIC1=MIC
   DIA1=DIA
@@ -223,16 +226,6 @@ plotBrkPtsERB=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkpt1,DIABrkp
   MIC[xcens==-1 & MIC==min(MIC)]=min(MIC)-1
   DIA[ycens==1 & DIA==max(DIA)]=max(DIA)+1
   DIA[ycens==-1 & DIA==min(DIA)]=min(DIA)-1
-  M1=MICBrkptL; M2=MICBrkptU
-  D1=DIABrkpt1; D2=DIABrkpt2
-  a1=data.frame(MIC,DIA)
-  a1=count(a1,c('MIC','DIA'))
-  Freq=a1$freq; MIC=a1$MIC; DIA=a1$DIA
-
-  MICBrkptL=MICBrkptL+.5
-  MICBrkptU=MICBrkptU-.5
-  DIABrkpt1=DIABrkpt1+.5
-  DIABrkpt2=DIABrkpt2-.5
 
   n=length(MIC); classification=rep(NA,n)
   for (i in 1:n){
@@ -255,20 +248,34 @@ plotBrkPtsERB=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkpt1,DIABrkp
     #I MIC R DIA
     else if((MIC[i]>M1 & MIC[i]<M2) & DIA[i]<=D1)classification[i]='Minor'
   }
-  a1=data.frame(MIC,DIA,Freq,classification,stringsAsFactors=FALSE)
-#   a1=rbind(a1,c(999,999,0,'Minor'))
-#   a1=rbind(a1,c(999,999,0,'Major'))
-#   a1=rbind(a1,c(999,999,0,'Very Major'))
-  a1[,1:3] = apply(a1[,1:3], 2, function(x) as.numeric(x));
+  a1=data.frame(MIC,DIA,classification,stringsAsFactors=FALSE)
+  a1 = a1 %>% group_by(MIC,DIA,classification) %>% summarize(Freq=n())
   a1$classification=factor(a1$classification,levels=c("Correct", "Minor", "Major","Very Major"))
 
-  if(MICXaxis=='Yes' && log2MIC==TRUE){
+
+  MICBrkptL=MICBrkptL+.5
+  MICBrkptU=MICBrkptU-.5
+  DIABrkptL=DIABrkptL+.5
+  DIABrkptU=DIABrkptU-.5
+
+
+  if(log2MIC==TRUE){
+    MICBrkptL=2^MICBrkptL
+    MICBrkptU=2^MICBrkptU
+    MIC2=MIC1
+    a1$MIC=2^a1$MIC
+    MICTemp=c(min(MIC1)-1,min(MIC1):max(MIC1),max(MIC1)+1)
+    MICTemp=2^MICTemp
+    x=2^(min(MIC1):max(MIC1))
+  }
+
+  if(MICXaxis==TRUE && log2MIC==FALSE){
     fit=ggplot(a1,aes(MIC,DIA))+geom_text(aes(label=Freq,color=factor(classification)),size=4,show_guide=FALSE)+
       geom_point(aes(group=factor(classification),color=factor(classification)),size=0)+
       geom_vline(xintercept=MICBrkptL,lty=2,alpha=.4)+
       geom_vline(xintercept=MICBrkptU,lty=2,alpha=.4)+
-      geom_hline(yintercept=DIABrkpt1,lty=2,alpha=.4)+
-      geom_hline(yintercept=DIABrkpt2,lty=2,alpha=.4)+
+      geom_hline(yintercept=DIABrkptL,lty=2,alpha=.4)+
+      geom_hline(yintercept=DIABrkptU,lty=2,alpha=.4)+
       labs(x='MIC (Dilution Test in log(ug/mL))',y='DIA (Diffusion Test in mm)')+
       scale_x_continuous(breaks = seq(min(MIC1)-1,max(MIC1)+1,by=1),
           labels = c(paste("<",min(MIC1),sep=''),seq(min(MIC1),max(MIC1),by=1), paste(">",max(MIC1),sep='')),
@@ -286,21 +293,14 @@ plotBrkPtsERB=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkpt1,DIABrkp
       theme_dbets()
 
   }
-  if(MICXaxis=='Yes' && log2MIC==FALSE){
-    MICBrkptL=2^MICBrkptL
-    MICBrkptU=2^MICBrkptU
-    MIC2=MIC1
-    a1$MIC=2^a1$MIC
-    MICTemp=c(min(MIC1)-1,min(MIC1):max(MIC1),max(MIC1)+1)
-    MICTemp=2^MICTemp
-    x=2^(min(MIC1):max(MIC1))
+  if(MICXaxis==TRUE && log2MIC==TRUE){
 
     fit=ggplot(a1,aes(MIC,DIA))+geom_text(aes(label=Freq,color=factor(classification)),size=4,show_guide=FALSE)+
       geom_point(aes(group=factor(classification),color=factor(classification)),size=0)+
       geom_vline(xintercept=MICBrkptL,lty=2,alpha=.4)+
       geom_vline(xintercept=MICBrkptU,lty=2,alpha=.4)+
-      geom_hline(yintercept=DIABrkpt1,lty=2,alpha=.4)+
-      geom_hline(yintercept=DIABrkpt2,lty=2,alpha=.4)+
+      geom_hline(yintercept=DIABrkptL,lty=2,alpha=.4)+
+      geom_hline(yintercept=DIABrkptU,lty=2,alpha=.4)+
       labs(x='MIC (Dilution Test in ug/mL)',y='DIA (Diffusion Test in mm)')+
       scale_x_continuous(trans=log2_trans(),
                          limits=c(min(MICTemp),max(MICTemp)),
@@ -318,13 +318,13 @@ plotBrkPtsERB=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkpt1,DIABrkp
       guides(colour = guide_legend(override.aes = list(size=3,alpha = 1)))+
       theme_dbets()
   }
-  if(MICXaxis=='No' && log2MIC==TRUE){
+  if(MICXaxis=FALSE && log2MIC==FALSE){
     fit=ggplot(a1,aes(DIA,MIC))+geom_text(aes(label=Freq,color=factor(classification)),size=4,show_guide=FALSE)+
       geom_point(aes(group=factor(classification),color=factor(classification)),size=0)+
       geom_hline(yintercept=MICBrkptL,lty=2,alpha=.4)+
       geom_hline(yintercept=MICBrkptU,lty=2,alpha=.4)+
-      geom_vline(xintercept=DIABrkpt1,lty=2,alpha=.4)+
-      geom_vline(xintercept=DIABrkpt2,lty=2,alpha=.4)+
+      geom_vline(xintercept=DIABrkptL,lty=2,alpha=.4)+
+      geom_vline(xintercept=DIABrkptU,lty=2,alpha=.4)+
       labs(y='MIC (Dilution Test in log(ug/mL))',x='DIA (Diffusion Test in mm)')+
       scale_y_continuous(breaks = seq(min(MIC1)-1,max(MIC1)+1,by=1),
           labels = c(paste("<",min(MIC1),sep=''),seq(min(MIC1),max(MIC1),by=1), paste(">",max(MIC1),sep='')),
@@ -341,21 +341,14 @@ plotBrkPtsERB=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkpt1,DIABrkp
           guides(colour = guide_legend(override.aes = list(size=3,alpha = 1)))+
       theme_dbets()
   }
-  if(MICXaxis=='No' && log2MIC==FALSE){
-    MICBrkptL=2^MICBrkptL
-    MICBrkptU=2^MICBrkptU
-    MIC2=MIC1
-    a1$MIC=2^a1$MIC
-    MICTemp=c(min(MIC1)-1,min(MIC1):max(MIC1),max(MIC1)+1)
-    MICTemp=2^MICTemp
-    x=2^(min(MIC1):max(MIC1))
+  if(MICXaxis==FALSE && log2MIC==TRUE){
 
     fit=ggplot(a1,aes(DIA,MIC))+geom_text(aes(label=Freq,color=factor(classification)),size=4,show_guide=FALSE)+
       geom_point(aes(group=factor(classification),color=factor(classification)),size=0)+
       geom_hline(yintercept=MICBrkptL,lty=2,alpha=.4)+
       geom_hline(yintercept=MICBrkptU,lty=2,alpha=.4)+
-      geom_vline(xintercept=DIABrkpt1,lty=2,alpha=.4)+
-      geom_vline(xintercept=DIABrkpt2,lty=2,alpha=.4)+
+      geom_vline(xintercept=DIABrkptL,lty=2,alpha=.4)+
+      geom_vline(xintercept=DIABrkptU,lty=2,alpha=.4)+
       labs(y='MIC (Dilution Test in ug/mL)',x='DIA (Diffusion Test in mm)')+
       scale_y_continuous(trans=log2_trans(),
            limits=c(min(MICTemp),max(MICTemp)),
@@ -372,8 +365,6 @@ plotBrkPtsERB=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkpt1,DIABrkp
         legend.text = element_text(size = 14))+
       guides(colour = guide_legend(override.aes = list(size=3,alpha = 1)))+
       theme_dbets()
-
-
   }
 
   return(fit)

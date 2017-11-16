@@ -111,9 +111,6 @@ plotBrkPtsERBOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,MICXaxis,log2MIC
   MIC[xcens==-1 & MIC==min(MIC)]=min(MIC)-1
   DIA[ycens==1 & DIA==max(DIA)]=max(DIA)+1
   DIA[ycens==-1 & DIA==min(DIA)]=min(DIA)-1
-  a1=data.frame(MIC,DIA)
-  a1=count(a1,c('MIC','DIA'))
-  Freq=a1$freq; MIC=a1$MIC; DIA=a1$DIA
 
   n=length(MIC); classification=rep(NA,n)
   for (i in 1:n){
@@ -126,9 +123,12 @@ plotBrkPtsERBOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,MICXaxis,log2MIC
     #S MIC R DIA
     else if(MIC[i]<=MICBrkpt & DIA[i]<=DIABrkpt) classification[i]='Major'
   }
-  a1=data.frame(MIC,DIA,Freq,classification,stringsAsFactors=FALSE)
-  a1[,1:3] = apply(a1[,1:3], 2, function(x) as.numeric(x));
+  a1=data.frame(MIC,DIA,classification,stringsAsFactors=FALSE)
+  a1 = a1 %>% group_by(MIC,DIA,classification) %>% summarize(Freq=n())
   a1$classification=factor(a1$classification,levels=c("Correct","Major","Very Major"))
+
+  MICBrkpt=MICBrkpt+.5
+  DIABrkpt=DIABrkpt+.5
 
   if(MICXaxis=='Yes' && log2MIC==TRUE){
     fit=ggplot(a1,aes(MIC,DIA))+geom_text(aes(label=Freq,color=factor(classification)),size=4,show_guide=FALSE)+

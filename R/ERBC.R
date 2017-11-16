@@ -1,5 +1,5 @@
 
-findBrkptsERBC=function(MIC,DIA,VM1,M1,m1,VM2,M2,m2,MICBrkpt1,MICBrkpt2,minWidth,maxWidth){
+findBrkptsERBC=function(MIC,DIA,VM1,M1,m1,VM2,M2,m2,MICBrkptL,MICBrkptU,minWidth,maxWidth){
 
   #create weights
   temp=max(VM1,M1,m1,VM2,M2,m2)
@@ -9,11 +9,11 @@ findBrkptsERBC=function(MIC,DIA,VM1,M1,m1,VM2,M2,m2,MICBrkpt1,MICBrkpt2,minWidth
   D1=0; D2=0
 
   #observations within different ranges
-  MICwithinOne=MIC[which(MIC>=(MICBrkpt1) & MIC<=(MICBrkpt2))]
-  DIAwithinOne=DIA[which(MIC>=(MICBrkpt1) & MIC<=(MICBrkpt2))]
+  MICwithinOne=MIC[which(MIC>=(MICBrkptL) & MIC<=(MICBrkptU))]
+  DIAwithinOne=DIA[which(MIC>=(MICBrkptL) & MIC<=(MICBrkptU))]
   N1=length(MICwithinOne)
-  MICOutsideOne=MIC[which(MIC<(MICBrkpt1) | MIC>(MICBrkpt2))]
-  DIAOutsideOne=DIA[which(MIC<(MICBrkpt1) | MIC>(MICBrkpt2))]
+  MICOutsideOne=MIC[which(MIC<(MICBrkptL) | MIC>(MICBrkptU))]
+  DIAOutsideOne=DIA[which(MIC<(MICBrkptL) | MIC>(MICBrkptU))]
   N2=length(MICOutsideOne)
 
   minDIA=min(DIA); maxDIA=max(DIA)
@@ -24,8 +24,8 @@ findBrkptsERBC=function(MIC,DIA,VM1,M1,m1,VM2,M2,m2,MICBrkpt1,MICBrkpt2,minWidth
   storage.mode(MICOutsideOne) <- "double"
   storage.mode(DIAwithinOne) <- "double"
   storage.mode(DIAOutsideOne) <- "double"
-  storage.mode(MICBrkpt1) <- "double"
-  storage.mode(MICBrkpt2) <- "double"
+  storage.mode(MICBrkptL) <- "double"
+  storage.mode(MICBrkptU) <- "double"
   storage.mode(N1) <- "integer"
   storage.mode(N2) <- "integer"
   storage.mode(VM1) <- "double"
@@ -39,7 +39,7 @@ findBrkptsERBC=function(MIC,DIA,VM1,M1,m1,VM2,M2,m2,MICBrkpt1,MICBrkpt2,minWidth
   storage.mode(D1) <- "integer"
   storage.mode(D2) <- "integer"
 
-  temp=.C(ERB,minDIA,maxDIA,MICwithinOne,MICOutsideOne,DIAwithinOne,DIAOutsideOne,MICBrkpt1,MICBrkpt2,N1,N2,
+  temp=.C("ERB",minDIA,maxDIA,MICwithinOne,MICOutsideOne,DIAwithinOne,DIAOutsideOne,MICBrkptL,MICBrkptU,N1,N2,
           VM1,M1,m1,VM2,M2,m2,minWidth,maxWidth,D1,D2)
   return(list(D1=temp[[19]],D2=temp[[20]]))
 
