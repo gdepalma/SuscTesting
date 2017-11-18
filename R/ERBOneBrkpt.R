@@ -130,8 +130,17 @@ plotBrkPtsERBOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,MICXaxis,log2MIC
   MICBrkpt=MICBrkpt+.5
   DIABrkpt=DIABrkpt+.5
 
-  if(MICXaxis=='Yes' && log2MIC==TRUE){
-    fit=ggplot(a1,aes(MIC,DIA))+geom_text(aes(label=Freq,color=factor(classification)),size=4,show_guide=FALSE)+
+  if(log2MIC==TRUE){
+    MICBrkpt=2^MICBrkpt
+    MIC2=MIC1
+    a1$MIC=2^a1$MIC
+    MICTemp=c(min(MIC2)-1,min(MIC2):max(MIC2),max(MIC2)+1)
+    MICTemp=2^MICTemp
+    x=2^(min(MIC2):max(MIC2))
+  }
+
+  if(MICXaxis==TRUE && log2MIC==FALSE){
+    fit=ggplot(a1,aes(MIC,DIA))+geom_text(aes(label=Freq,color=factor(classification)),size=4)+
       geom_point(aes(group=factor(classification),color=factor(classification)),size=0)+
       geom_vline(xintercept=MICBrkpt,lty=2,alpha=.4)+
       geom_hline(yintercept=DIABrkpt,lty=2,alpha=.4)+
@@ -142,23 +151,18 @@ plotBrkPtsERBOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,MICXaxis,log2MIC
       scale_y_continuous(breaks = seq(min(DIA1)-1,max(DIA1)+1,by=1),
                          labels = c(paste("<",min(DIA1),sep=''),seq(min(DIA1),max(DIA1),by=1), paste(">",max(DIA1),sep='')),
                          limits = c(min(DIA1)-1,max(DIA1)+1))+
-      scale_color_manual(values=c('Correct'='Black','Major'='#CC9900','Very Major'='red'))+
+      scale_color_manual(values=c('Correct'='Black','Major'='#CC9900','Very Major'='red'))+theme_dbets()+
       theme(
         legend.position='top',
         legend.title=element_blank(),
-        legend.key=element_rect(fill="white",colour="white"),
-        legend.text = element_text(size = 14))+
-      guides(colour = guide_legend(override.aes = list(size=3,alpha = 1)))
+        legend.key=element_rect(fill="gray95",colour="white"),
+        legend.text = element_text(size = 15))+
+      guides(colour = guide_legend(override.aes = list(size=5,alpha = 1)))
   }
-  if(MICXaxis=='Yes' && log2MIC==FALSE){
-    MICBrkpt=2^MICBrkpt
-    MIC2=MIC1
-    a1$MIC=2^a1$MIC
-    MICTemp=c(min(MIC2)-1,min(MIC2):max(MIC2),max(MIC2)+1)
-    MICTemp=2^MICTemp
-    x=2^(min(MIC2):max(MIC2))
+  if(MICXaxis==TRUE && log2MIC==TRUE){
 
-    fit=ggplot(a1,aes(MIC,DIA))+geom_text(aes(label=Freq,color=factor(classification)),size=4,show_guide=FALSE)+
+
+    fit=ggplot(a1,aes(MIC,DIA))+geom_text(aes(label=Freq,color=factor(classification)),size=4)+
       geom_point(aes(group=factor(classification),color=factor(classification)),size=0)+
       geom_vline(xintercept=MICBrkpt,lty=2,alpha=.4)+
       geom_hline(yintercept=DIABrkpt,lty=2,alpha=.4)+
@@ -170,16 +174,16 @@ plotBrkPtsERBOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,MICXaxis,log2MIC
       scale_y_continuous(breaks = seq(min(DIA1)-1,max(DIA1)+1,by=1),
                          labels = c(paste("<",min(DIA1),sep=''),seq(min(DIA1),max(DIA1),by=1), paste(">",max(DIA1),sep='')),
                          limits = c(min(DIA1)-1,max(DIA1)+1))+
-      scale_color_manual(values=c('Correct'='Black','Major'='#CC9900','Very Major'='red'))+
+      scale_color_manual(values=c('Correct'='Black','Major'='#CC9900','Very Major'='red'))+theme_dbets()+
       theme(
         legend.position='top',
         legend.title=element_blank(),
-        legend.key=element_rect(fill="white",colour="white"),
+        legend.key=element_rect(fill="gray95",colour="white"),
         legend.text = element_text(size = 14))+
       guides(colour = guide_legend(override.aes = list(size=3,alpha = 1)))
   }
-  if(MICXaxis=='No' && log2MIC==TRUE){
-    fit=ggplot(a1,aes(DIA,MIC))+geom_text(aes(label=Freq,color=factor(classification)),size=4,show_guide=FALSE)+
+  if(MICXaxis==FALSE && log2MIC==FALSE){
+    fit=ggplot(a1,aes(DIA,MIC))+geom_text(aes(label=Freq,color=factor(classification)),size=4)+
       geom_point(aes(group=factor(classification),color=factor(classification)),size=0)+
       geom_hline(yintercept=MICBrkpt,lty=2,alpha=.4)+
       geom_vline(xintercept=DIABrkpt,lty=2,alpha=.4)+
@@ -190,23 +194,17 @@ plotBrkPtsERBOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,MICXaxis,log2MIC
       scale_x_continuous(breaks = seq(min(DIA1)-1,max(DIA1)+1,by=1),
                          labels = c(paste("<",min(DIA1),sep=''),seq(min(DIA1),max(DIA1),by=1), paste(">",max(DIA1),sep='')),
                          limits = c(min(DIA1)-1,max(DIA1)+1))+
-      scale_color_manual(values=c('Correct'='Black','Major'='#CC9900','Very Major'='red'))+
+      scale_color_manual(values=c('Correct'='Black','Major'='#CC9900','Very Major'='red'))+theme_dbets()+
       theme(
         legend.position='top',
         legend.title=element_blank(),
-        legend.key=element_rect(fill="white",colour="white"),
+        legend.key=element_rect(fill="gray95",colour="white"),
         legend.text = element_text(size = 14))+
       guides(colour = guide_legend(override.aes = list(size=3,alpha = 1)))
   }
-  if(MICXaxis=='No' && log2MIC==FALSE){
-    MICBrkpt=2^MICBrkpt
-    MIC2=MIC1
-    a1$MIC=2^a1$MIC
-    MICTemp=c(min(MIC2)-1,min(MIC2):max(MIC2),max(MIC2)+1)
-    MICTemp=2^MICTemp
-    x=2^(min(MIC2):max(MIC2))
+  if(MICXaxis==FALSE && log2MIC==TRUE){
 
-    fit=ggplot(a1,aes(DIA,MIC))+geom_text(aes(label=Freq,color=factor(classification)),size=4,show_guide=FALSE)+
+    fit=ggplot(a1,aes(DIA,MIC))+geom_text(aes(label=Freq,color=factor(classification)),size=4)+
       geom_point(aes(group=factor(classification),color=factor(classification)),size=0)+
       geom_hline(yintercept=MICBrkpt,lty=2,alpha=.4)+
       geom_vline(xintercept=DIABrkpt,lty=2,alpha=.4)+
@@ -218,11 +216,11 @@ plotBrkPtsERBOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,MICXaxis,log2MIC
       scale_x_continuous(breaks = seq(min(DIA1)-1,max(DIA1)+1,by=1),
                          labels = c(paste("<",min(DIA1),sep=''),seq(min(DIA1),max(DIA1),by=1), paste(">",max(DIA1),sep='')),
                          limits = c(min(DIA1)-1,max(DIA1)+1))+
-      scale_color_manual(values=c('Correct'='Black','Major'='#CC9900','Very Major'='red'))+
+      scale_color_manual(values=c('Correct'='Black','Major'='#CC9900','Very Major'='red'))+theme_dbets()+
       theme(
         legend.position='top',
         legend.title=element_blank(),
-        legend.key=element_rect(fill="white",colour="white"),
+        legend.key=element_rect(fill="gray95",colour="white"),
         legend.text = element_text(size = 14))+
       guides(colour = guide_legend(override.aes = list(size=3,alpha = 1)))
 

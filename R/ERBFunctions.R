@@ -89,15 +89,15 @@ ERB=function(D1,D2,MIC,DIA,MICBrkptL,MICBrkptU,VM1,M1,m1,VM2,M2,m2,withinOneVect
 
 
   return(list(idx=index1+index2,CorPerc1=CorrectPerc1,VMPerc1=VMPerc1,MPerc1=MPerc1,mPerc1=mPerc1,CorrectCount1=sum(SS1,RR1,II1),
-           VMCount1=VMCount1,MCount1=MCount1,mCount1=mCount1,
-           CorPerc2=CorrectPerc2,VMPerc2=VMPerc2,MPerc2=MPerc2,mPerc2=mPerc2,
-           CorrectCount2=sum(SS2,RR2,II2),VMCount2=VMCount2,MCount2=MCount2,mCount2=mCount2))
+              VMCount1=VMCount1,MCount1=MCount1,mCount1=mCount1,
+              CorPerc2=CorrectPerc2,VMPerc2=VMPerc2,MPerc2=MPerc2,mPerc2=mPerc2,
+              CorrectCount2=sum(SS2,RR2,II2),VMCount2=VMCount2,MCount2=MCount2,mCount2=mCount2))
 }
 
 
 #finds optimum DIA given breakpoints M1 and M2 error rate bounded method
 findBrkptsERB=function(MIC,DIA,VM1=10,M1=10,m1=40,VM2=2,M2=2,m2=5,
-  MICBrkptL,MICBrkptU,minWidth=4,maxWidth=20){
+                       MICBrkptL,MICBrkptU,minWidth=4,maxWidth=20){
 
   VM1=10;M1=10;m1=40;VM2=2;M2=2;m2=5;minWidth=4;maxWidth=20
 
@@ -141,7 +141,7 @@ findBrkptsERB=function(MIC,DIA,VM1=10,M1=10,m1=40,VM2=2,M2=2,m2=5,
 
 
 ERBGivenDIA=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkptL,DIABrkptU,
-  VM1=10,M1=10,m1=40,VM2=2,M2=2,m2=5){
+                     VM1=10,M1=10,m1=40,VM2=2,M2=2,m2=5){
 
   MICBrkptL=MICBrkptL
   MICBrkptU=MICBrkptU
@@ -204,7 +204,7 @@ PlotBrkptsERB2=function(MIC,DIA,xcens,ycens,VM1=10,M1=10,m1=40,VM2=2,M2=2,m2=5,
 }
 
 PlotBrkptsERBGiven=function(MIC,DIA,xcens,ycens,VM1=10,M1=10,m1=40,VM2=2,M2=2,m2=5,
-                        MICBrkptL,MICBrkptU,D1,D2,minWidth=4,maxWidth=20,MICXaxis,log2MIC){
+                            MICBrkptL,MICBrkptU,D1,D2,minWidth=4,maxWidth=20,MICXaxis,log2MIC){
 
   MICBrkptL=MICBrkptL
   MICBrkptU=MICBrkptU
@@ -258,7 +258,6 @@ plotBrkPtsERB=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkptL,DIABrkp
   DIABrkptL=DIABrkptL+.5
   DIABrkptU=DIABrkptU-.5
 
-
   if(log2MIC==TRUE){
     MICBrkptL=2^MICBrkptL
     MICBrkptU=2^MICBrkptU
@@ -270,7 +269,7 @@ plotBrkPtsERB=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkptL,DIABrkp
   }
 
   if(MICXaxis==TRUE && log2MIC==FALSE){
-    fit=ggplot(a1,aes(MIC,DIA))+geom_text(aes(label=Freq,color=factor(classification)),size=4,show_guide=FALSE)+
+    fit=ggplot(a1,aes(MIC,DIA))+geom_text(aes(label=Freq,color=factor(classification)),size=4)+
       geom_point(aes(group=factor(classification),color=factor(classification)),size=0)+
       geom_vline(xintercept=MICBrkptL,lty=2,alpha=.4)+
       geom_vline(xintercept=MICBrkptU,lty=2,alpha=.4)+
@@ -278,24 +277,24 @@ plotBrkPtsERB=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkptL,DIABrkp
       geom_hline(yintercept=DIABrkptU,lty=2,alpha=.4)+
       labs(x='MIC (Dilution Test in log(ug/mL))',y='DIA (Diffusion Test in mm)')+
       scale_x_continuous(breaks = seq(min(MIC1)-1,max(MIC1)+1,by=1),
-          labels = c(paste("<",min(MIC1),sep=''),seq(min(MIC1),max(MIC1),by=1), paste(">",max(MIC1),sep='')),
-          limits = c(min(MIC1)-1,max(MIC1)+1))+
+                         labels = c(paste("<",min(MIC1),sep=''),seq(min(MIC1),max(MIC1),by=1), paste(">",max(MIC1),sep='')),
+                         limits = c(min(MIC1)-1,max(MIC1)+1))+
       scale_y_continuous(breaks = seq(min(DIA1)-1,max(DIA1)+1,by=1),
                          labels = c(paste("<",min(DIA1),sep=''),seq(min(DIA1),max(DIA1),by=1), paste(">",max(DIA1),sep='')),
                          limits = c(min(DIA1)-1,max(DIA1)+1))+
       scale_color_manual(values=c('Correct'='Black','Minor'='blue','Major'='#CC9900','Very Major'='red'))+
+      guides(colour = guide_legend(override.aes = list(size=3,alpha = 1)))+theme_dbets()+
       theme(
-          legend.position='top',
-          legend.title=element_blank(),
-          legend.key=element_rect(fill="white",colour="white"),
-          legend.text = element_text(size = 14))+
-          guides(colour = guide_legend(override.aes = list(size=3,alpha = 1)))+
-      theme_dbets()
+        legend.position='top',
+        legend.title=element_blank(),
+        legend.key=element_rect(fill="gray95",colour="white"),
+        legend.text = element_text(size = 15))
+
 
   }
   if(MICXaxis==TRUE && log2MIC==TRUE){
 
-    fit=ggplot(a1,aes(MIC,DIA))+geom_text(aes(label=Freq,color=factor(classification)),size=4,show_guide=FALSE)+
+    fit=ggplot(a1,aes(MIC,DIA))+geom_text(aes(label=Freq,color=factor(classification)),size=4)+
       geom_point(aes(group=factor(classification),color=factor(classification)),size=0)+
       geom_vline(xintercept=MICBrkptL,lty=2,alpha=.4)+
       geom_vline(xintercept=MICBrkptU,lty=2,alpha=.4)+
@@ -310,16 +309,15 @@ plotBrkPtsERB=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkptL,DIABrkp
                          labels = c(paste("<",min(DIA1),sep=''),seq(min(DIA1),max(DIA1),by=1), paste(">",max(DIA1),sep='')),
                          limits = c(min(DIA1)-1,max(DIA1)+1))+
       scale_color_manual(values=c('Correct'='Black','Minor'='blue','Major'='#CC9900','Very Major'='red'))+
+      guides(colour = guide_legend(override.aes = list(size=3,alpha = 1)))+theme_dbets()+
       theme(
         legend.position='top',
         legend.title=element_blank(),
-        legend.key=element_rect(fill="white",colour="white"),
-        legend.text = element_text(size = 14))+
-      guides(colour = guide_legend(override.aes = list(size=3,alpha = 1)))+
-      theme_dbets()
+        legend.key=element_rect(fill="gray95",colour="white"),
+        legend.text = element_text(size = 14))
   }
-  if(MICXaxis=FALSE && log2MIC==FALSE){
-    fit=ggplot(a1,aes(DIA,MIC))+geom_text(aes(label=Freq,color=factor(classification)),size=4,show_guide=FALSE)+
+  if(MICXaxis==FALSE && log2MIC==FALSE){
+    fit=ggplot(a1,aes(DIA,MIC))+geom_text(aes(label=Freq,color=factor(classification)),size=4)+
       geom_point(aes(group=factor(classification),color=factor(classification)),size=0)+
       geom_hline(yintercept=MICBrkptL,lty=2,alpha=.4)+
       geom_hline(yintercept=MICBrkptU,lty=2,alpha=.4)+
@@ -327,23 +325,23 @@ plotBrkPtsERB=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkptL,DIABrkp
       geom_vline(xintercept=DIABrkptU,lty=2,alpha=.4)+
       labs(y='MIC (Dilution Test in log(ug/mL))',x='DIA (Diffusion Test in mm)')+
       scale_y_continuous(breaks = seq(min(MIC1)-1,max(MIC1)+1,by=1),
-          labels = c(paste("<",min(MIC1),sep=''),seq(min(MIC1),max(MIC1),by=1), paste(">",max(MIC1),sep='')),
-          limits = c(min(MIC1)-1,max(MIC1)+1))+
+                         labels = c(paste("<",min(MIC1),sep=''),seq(min(MIC1),max(MIC1),by=1), paste(">",max(MIC1),sep='')),
+                         limits = c(min(MIC1)-1,max(MIC1)+1))+
       scale_x_continuous(breaks = seq(min(DIA1)-1,max(DIA1)+1,by=1),
                          labels = c(paste("<",min(DIA1),sep=''),seq(min(DIA1),max(DIA1),by=1), paste(">",max(DIA1),sep='')),
                          limits = c(min(DIA1)-1,max(DIA1)+1))+
       scale_color_manual(values=c('Correct'='Black','Minor'='blue','Major'='#CC9900','Very Major'='red'))+
+      guides(colour = guide_legend(override.aes = list(size=3,alpha = 1)))+theme_dbets()+
       theme(
-          legend.position='top',
-          legend.title=element_blank(),
-          legend.key=element_rect(fill="white",colour="white"),
-          legend.text = element_text(size = 14))+
-          guides(colour = guide_legend(override.aes = list(size=3,alpha = 1)))+
-      theme_dbets()
+        legend.position='top',
+        legend.title=element_blank(),
+        legend.key=element_rect(fill="gray95",colour="white"),
+        legend.text = element_text(size = 14))
+
   }
   if(MICXaxis==FALSE && log2MIC==TRUE){
 
-    fit=ggplot(a1,aes(DIA,MIC))+geom_text(aes(label=Freq,color=factor(classification)),size=4,show_guide=FALSE)+
+    fit=ggplot(a1,aes(DIA,MIC))+geom_text(aes(label=Freq,color=factor(classification)),size=4)+
       geom_point(aes(group=factor(classification),color=factor(classification)),size=0)+
       geom_hline(yintercept=MICBrkptL,lty=2,alpha=.4)+
       geom_hline(yintercept=MICBrkptU,lty=2,alpha=.4)+
@@ -351,20 +349,20 @@ plotBrkPtsERB=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkptL,DIABrkp
       geom_vline(xintercept=DIABrkptU,lty=2,alpha=.4)+
       labs(y='MIC (Dilution Test in ug/mL)',x='DIA (Diffusion Test in mm)')+
       scale_y_continuous(trans=log2_trans(),
-           limits=c(min(MICTemp),max(MICTemp)),
-           breaks=MICTemp,
-           labels=c(paste("<",min(x),sep=''),sort(unique(x)), paste(">",max(x),sep='')))+
+                         limits=c(min(MICTemp),max(MICTemp)),
+                         breaks=MICTemp,
+                         labels=c(paste("<",min(x),sep=''),sort(unique(x)), paste(">",max(x),sep='')))+
       scale_x_continuous(breaks = seq(min(DIA1)-1,max(DIA1)+1,by=1),
                          labels = c(paste("<",min(DIA1),sep=''),seq(min(DIA1),max(DIA1),by=1), paste(">",max(DIA1),sep='')),
                          limits = c(min(DIA1)-1,max(DIA1)+1))+
       scale_color_manual(values=c('Correct'='Black','Minor'='blue','Major'='#CC9900','Very Major'='red'))+
+      guides(colour = guide_legend(override.aes = list(size=3,alpha = 1)))+theme_dbets()+
       theme(
         legend.position='top',
         legend.title=element_blank(),
-        legend.key=element_rect(fill="white",colour="white"),
+        legend.key=element_rect(fill="gray95",colour="white"),
         legend.text = element_text(size = 14))+
-      guides(colour = guide_legend(override.aes = list(size=3,alpha = 1)))+
-      theme_dbets()
+      guides(colour = guide_legend(override.aes = list(size=3,alpha = 1)))
   }
 
   return(fit)
@@ -373,32 +371,19 @@ plotBrkPtsERB=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkptL,DIABrkp
 
 
 bootStrapERB=function(MIC,DIA,MICBrkptL,MICBrkptU,VM1=10,M1=10,m1=40,VM2=2,M2=2,m2=5,
-                      minWidth=4,maxWidth=20,session){
+                      minWidth=3,maxWidth=10){
 
-  MICBrkptL=MICBrkptL
-  MICBrkptU=MICBrkptU
+  a1=data.frame(MIC=MIC,DIA=DIA)
+  DIABrkptL=rep(NA,5000)
+  DIABrkptU=rep(NA,5000)
+  n=nrow(a1)
 
-  #bootstrap
-  DIABrkptL<<-rep(NA,12000); DIABrkptU<<-rep(NA,12000);
-  n=length(MIC)
-
-  withProgress(session, min=1, max=12000, {
-    setProgress(message = 'Calculation in progress')
-    for(i in 1:12000){
-      #resample points
-      if(i %% 1000==0) setProgress(value = i)
-      idx=sample(seq(1,n,by=1),n,replace=T)
-      MIC_sam=MIC[idx]
-      DIA_sam=DIA[idx]
-
-      #get weighted breakpoints
-      parms=findBrkptsERBC(MIC_sam,DIA_sam,VM1,M1,m1,VM2,M2,m2,MICBrkptL,MICBrkptU,minWidth,maxWidth)
-      DIABrkptL[i]<<-parms$D1;   DIABrkptU[i]<<-parms$D2
-    }
-  })
-
-#   DIABrkptL=c(one[[1]]$D1,one[[2]]$D1,one[[3]]$D1,one[[4]]$D1)
-#   DIABrkptU=c(one[[1]]$D2,one[[2]]$D2,one[[3]]$D2,one[[4]]$D2)
+  for(i in 1:5000){
+    tmp=sample_n(a1,n,replace=TRUE)
+    parms=findBrkptsERBC(tmp$MIC,tmp$DIA,VM1,M1,m1,VM2,M2,m2,MICBrkptL,MICBrkptU,minWidth,maxWidth)
+    DIABrkptL[i]=parms$D1
+    DIABrkptU[i]=parms$D2
+  }
 
 
   #print results
@@ -437,16 +422,13 @@ plotBootDataERB=function(bootData){
     a2=bootData[(idx+2):nrow(bootData),]
   a1$Freq=round(a1$Freq,2)
 
-  fit=ggplot(data=a1,aes(x=DIABrkptL,y=DIABrkptU,label=Freq))+geom_text(size=7.5)+
+  fit=ggplot(data=a1,aes(x=DIABrkptL,y=DIABrkptU,label=Freq))+geom_text(size=7)+
     scale_x_continuous(breaks = seq(min(D1),max(D1),by=1),
                        limits = c(min(D1),max(D1)))+
     scale_y_continuous(breaks = seq(min(D2),max(D2),by=1),
                        limits = c(min(D2),max(D2)))+
     labs(x='Lower DIA Breakpoint',y='Upper DIA Breakpoint',
-         title=expression(atop("DIA Breakpoint Distribution", atop("black points are outside 95% confidence", ""))))+
-    theme(
-      plot.title = element_text(size = 17, hjust=0.5,vjust=1),
-      legend.position = "none")+
+         title="DIA Breakpoint Distribution", subtitle="Black points are outside 95% confidence")+
     theme_dbets()
   if((idx+1)!=nrow(bootData))
     fit=fit+geom_point(data=a2,(aes(x=DIABrkptL,y=DIABrkptU)),size=3)
@@ -454,9 +436,3 @@ plotBootDataERB=function(bootData){
 
   invisible()
 }
-
-
-
-
-
-
