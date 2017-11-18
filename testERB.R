@@ -61,4 +61,6 @@ plotBrkPtsERBOne(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,MICXaxis=FALSE,log2MIC=FA
 # Boot
 bootData=bootStrapERB(MIC,DIA,MICBrkptL,MICBrkptU,VM1=10,M1=10,m1=40,VM2=2,M2=2,m2=5,
                       minWidth=3,maxWidth=10)
+plotBootDataERB(bootData)
+
 

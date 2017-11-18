@@ -420,9 +420,9 @@ plotBootDataERB=function(bootData){
   a1=bootData[1:(idx+1),]
   if((idx+1)!=nrow(bootData))
     a2=bootData[(idx+2):nrow(bootData),]
-  a1$Freq=round(a1$Freq,2)
+  a1$Freq=format(round(a1$Freq, 1), nsmall = 1)
 
-  fit=ggplot(data=a1,aes(x=DIABrkptL,y=DIABrkptU,label=Freq))+geom_text(size=7)+
+  fit=ggplot(data=a1,aes(x=DIABrkptL,y=DIABrkptU,label=Freq))+geom_text(size=6.5)+
     scale_x_continuous(breaks = seq(min(D1),max(D1),by=1),
                        limits = c(min(D1),max(D1)))+
     scale_y_continuous(breaks = seq(min(D2),max(D2),by=1),
@@ -431,7 +431,7 @@ plotBootDataERB=function(bootData){
          title="DIA Breakpoint Distribution", subtitle="Black points are outside 95% confidence")+
     theme_dbets()
   if((idx+1)!=nrow(bootData))
-    fit=fit+geom_point(data=a2,(aes(x=DIABrkptL,y=DIABrkptU)),size=3)
+    fit=fit+geom_point(data=a2,(aes(x=DIABrkptL,y=DIABrkptU)),size=2.5)
   print(fit)
 
   invisible()
