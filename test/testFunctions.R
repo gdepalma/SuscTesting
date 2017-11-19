@@ -21,7 +21,7 @@ library(StanBayesianErrorsMonoModels)
 #
 # yobs=round(ytrue+rnorm(nobs,0,ysig))
 
-a1 = read_csv(file='data1.csv')
+a1 = read_csv(file='test/data1.csv')
 parms=parse_data(a1)
 MIC=parms$MIC; DIA=parms$DIA; xcens=parms$xcens; ycens=parms$ycens
 
