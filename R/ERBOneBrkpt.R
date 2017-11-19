@@ -232,26 +232,17 @@ plotBrkPtsERBOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,MICXaxis,log2MIC
 }
 
 
-bootStrapERBOne=function(MIC,DIA,MICBrkpt,VM,M,session){
+bootStrapERBOne=function(MIC,DIA,MICBrkpt,VM=1,M=5){
 
-  #bootstrap
-  DIABrkpt<<-rep(NA,12000)
-  n=length(MIC)
+  a1=data.frame(MIC=MIC,DIA=DIA)
+  DIABrkpt=rep(NA,5000)
+  n=nrow(a1)
 
-  withProgress(session, min=1, max=12000, {
-    setProgress(message = 'Calculation in progress')
-    for(i in 1:12000){
-      #resample points
-      if(i %% 1000==0) setProgress(value = i)
-      idx=sample(seq(1,n,by=1),n,replace=T)
-      MIC_sam=MIC[idx]
-      DIA_sam=DIA[idx]
-
-      #get weighted breakpoints
-      parms=findBrkptsERBOneC(MIC_sam,DIA_sam,VM,M,MICBrkpt)
-      DIABrkpt[i] <<- parms$DIABrkpt+.5
-    }
-  })
+  for(i in 1:5000){
+    tmp=sample_n(a1,n,replace=TRUE)
+    parms=findBrkptsERBOneC(tmp$MIC,tmp$DIA,VM,M,MICBrkpt)
+    DIABrkpt[i]=parms$DIABrkpt
+  }
 
 
   #print results
@@ -265,7 +256,7 @@ bootStrapERBOne=function(MIC,DIA,MICBrkpt,VM,M,session){
   a2[,2]=round(a2[,2],2)
   a2[,3]=round(a2[,3],2)
 
-  cat('Bootstrap samples = 12000 \n')
+  cat('Bootstrap samples = 5000 \n')
   cat('\n-------DIA Breakpoints by Confidence--------\n')
   temp=data.frame(DIABrkpt=a2[,1],Percent=a2[,2],Cumulative=a2[,3])
   temp[,1:3] = apply(temp[,1:3], 2, function(x) as.character(x));
@@ -276,7 +267,6 @@ bootStrapERBOne=function(MIC,DIA,MICBrkpt,VM,M,session){
   invisible()
 
 }
-
 
 
 

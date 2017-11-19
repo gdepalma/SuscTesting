@@ -99,7 +99,7 @@ ERB=function(D1,D2,MIC,DIA,MICBrkptL,MICBrkptU,VM1,M1,m1,VM2,M2,m2,withinOneVect
 findBrkptsERB=function(MIC,DIA,VM1=10,M1=10,m1=40,VM2=2,M2=2,m2=5,
                        MICBrkptL,MICBrkptU,minWidth=4,maxWidth=20){
 
-  VM1=10;M1=10;m1=40;VM2=2;M2=2;m2=5;minWidth=4;maxWidth=20
+  # VM1=10;M1=10;m1=40;VM2=2;M2=2;m2=5;minWidth=4;maxWidth=20
 
   #find optimal
   parms=findBrkptsERBC(MIC,DIA,VM1,M1,m1,VM2,M2,m2,MICBrkptL,MICBrkptU,minWidth,maxWidth)
@@ -397,7 +397,7 @@ bootStrapERB=function(MIC,DIA,MICBrkptL,MICBrkptU,VM1=10,M1=10,m1=40,VM2=2,M2=2,
   a2[,3]=round(a2[,3],2)
   a2[,4]=round(a2[,4],2)
 
-  cat('Bootstrap samples = 12000 \n')
+  cat('Bootstrap samples = 5000 \n')
   cat('\n-------DIA Breakpoints by Confidence--------\n')
   temp=data.frame(DIABrkptL=a2[,1],DIABrkptU=a2[,2],Percent=a2[,3],Cumulative=a2[,4])
   temp[,1:4] = apply(temp[,1:4], 2, function(x) as.character(x));
