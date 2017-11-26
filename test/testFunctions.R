@@ -82,11 +82,11 @@ list_of_draws_spline = stan_spline.fit(dat_sav,xgrid,nchains=1)
 
 
 output_graph_one_model_twoMIC(list_of_draws_logistic,xgrid,dat_sav,MICBrkptL,MICBrkptU)
-findDIAC=function(yobs,gridx,weights,fit,M1,M2,xsig,ysig,minWidth,maxWidth,minDIA,maxDIA){
-
 output_graph_one_model_oneMIC(list_of_draws_spline,xgrid,dat_sav,MICBrkpt)
 
+
 # Brkpts
+getDIABrkptsModel(list_of_draws_logistic,yobs,MICBrkptL,MICBrkptU)
 
 
 ### Compare Fits

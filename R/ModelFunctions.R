@@ -291,16 +291,16 @@ plotProbDIAClass=function(a1,M1,M2,DIASet1,DIASet2,logConvert){
 }
 
 
-findDIAC=function(yobs,gridx,weights,fit,M1,M2,xsig,ysig,minWidth,maxWidth,minDIA,maxDIA){
+findDIAC=function(DIA,xgrid,weights,fit,MICBrkptL,MICBrkptU,xsig,ysig,minWidth,maxWidth,minDIA,maxDIA){
   D1=0; D2=0; index=0
-  lgrid=length(gridx)
-  MICLowerObs=M1
-  MICLowerTrue=M1-.5
-  MICUpperObs=M2
-  MICUpperTrue=M2-.5
-  if(minDIA<min(yobs)) minDIA=min(yobs)
-  if(maxDIA>max(yobs)) maxDIA=max(yobs)
-  storage.mode(gridx) <- "double"
+  lgrid=length(xgrid)
+  MICLowerObs=MICBrkptL
+  MICLowerTrue=MICBrkptL-.5
+  MICUpperObs=MICBrkptU
+  MICUpperTrue=MICBrkptU-.5
+  if(minDIA<min(DIA)) minDIA=min(DIA)
+  if(maxDIA>max(DIA)) maxDIA=max(DIA)
+  storage.mode(xgrid) <- "double"
   storage.mode(weights) <- "double"
   storage.mode(fit) <- "double"
   storage.mode(MICLowerObs) <- "double"
@@ -317,7 +317,7 @@ findDIAC=function(yobs,gridx,weights,fit,M1,M2,xsig,ysig,minWidth,maxWidth,minDI
   storage.mode(index) <- "double"
   storage.mode(minWidth) <- "integer"
   storage.mode(maxWidth) <- "integer"
-  temp=.C("findDIATrue",gridx,weights,fit,MICLowerObs,MICUpperObs,MICLowerTrue,MICUpperTrue,
+  temp=.C("findDIATrue",xgrid,weights,fit,MICLowerObs,MICUpperObs,MICLowerTrue,MICUpperTrue,
           xsig,ysig,minDIA,maxDIA,lgrid,D1,D2,index,minWidth,maxWidth)
   D1=temp[[13]]
   D2=temp[[14]]
@@ -327,5 +327,21 @@ findDIAC=function(yobs,gridx,weights,fit,M1,M2,xsig,ysig,minWidth,maxWidth,minDI
   return(list(D1=D1,D2=D2,index=index))
 }
 
-getDIABrkptsModel=function(yobs,gridx,weights,fit,M1,M2,xsig,ysig,minWidth,maxWidth,minDIA,maxDIA){}
+getDIABrkptsModel_two=function(model_output,xgrid,MICBrkptL,MICBrkptU,xsig=.707,ysig=2.121,minWidth=3,
+                               maxWidth=12,minDIA=min(DIA)+2,maxDIA=max(DIA)-2){
+  MIC_Dens=model_output$MIC_Dens
+  gx=model_output$gx
+
+  xsig=.707;ysig=2.121;minWidth=3;maxWidth=12;minDIA=min(DIA)+2;maxDIA=max(DIA)-2
+
+  DIA_Brkpts=matrix(NA,nrow=nrow(MIC_Dens),ncol=2)
+  for(i in 1:nrow(MIC_Dens)){
+    parms=findDIAC(DIA,xgrid,MIC_Dens[i,],gx[i,],MICBrkptL,MICBrkptU,xsig,ysig,minWidth,maxWidth,minDIA,maxDIA)
+    DIA_Brkpts[i,1]=parms$D1
+    DIA_Brkpts[i,2]=parms$D2
+  }
+  table(DIA_Brkpts[,1],DIA_Brkpts[,2])
+
+
+}
 
