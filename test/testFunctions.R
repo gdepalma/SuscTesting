@@ -77,19 +77,15 @@ ycensl[ycens==-1] = 1
 ycensu=rep(0,N)
 ycensu[ycens==1] = 1
 dat_sav=data.frame(xobs=MIC,yobs=DIA,xcensl,xcensu,ycensu,ycensl)
-list_of_draws = stan_logistic.fit(dat_sav,xgrid,nchains=1)
-list_of_draws = stan_spline.fit(dat_sav,xgrid,nchains=1)
+list_of_draws_logistic = stan_logistic.fit(dat_sav,xgrid,nchains=1)
+list_of_draws_spline = stan_spline.fit(dat_sav,xgrid,nchains=1)
 
 
-parms=output_graphs(list_of_draws,xgrid,dat_sav)
-pltRel=parms$pltRel
-pltDens=parms$pltDens
+output_graph_one_model_twoMIC(list_of_draws_logistic,xgrid,dat_sav,MICBrkptL,MICBrkptU)
+output_graph_one_model_oneMIC(list_of_draws_spline,xgrid,dat_sav,MICBrkpt)
 
-plt1 <- ggplot_gtable(ggplot_build(pltRel))
-plt2 <- ggplot_gtable(ggplot_build(pltDens))
-maxWidth = unit.pmax(plt1$widths[2:3], plt2$widths[2:3])
-plt1$widths[2:3] <- maxWidth
-plt2$widths[2:3] <- maxWidth
-plot(grid.arrange(plt1, plt2, ncol=1, heights=c(5,2)))
 
+### Compare Fits
+output_graph_compare_twoMIC(list_of_draws_logistic,list_of_draws_spline,xgrid,dat_sav,MICBrkptL,MICBrkptU)
+output_graph_compare_oneMIC(list_of_draws_logistic,list_of_draws_spline,xgrid,dat_sav,MICBrkpt)
 
