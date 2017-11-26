@@ -1,8 +1,9 @@
 exportPattern("^[[:alpha:]]+")
 #' @import ggthemes
-#' @import mixtools
 #' @import tidyverse
 #' @import scales
+#' @import grid
+#' @import gridExtra
 
 
 useDynLib(SuscTesting)

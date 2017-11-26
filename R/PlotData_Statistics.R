@@ -195,8 +195,8 @@ descriptiveStatOne=function(MIC,DIA,xcens,ycens,MICBrkpt){
 
   cat('--------------- Data Set Characteristics ---------------\n \n')
   cat('Number of Isolates: ',N,'\n')
-  cat('Number Susceptible: ',sum(MIC<MICBrkpt),'\n')
-  cat('Number Resistant: ',sum(MIC>MICBrkpt),'\n')
+  cat('Number Susceptible: ',sum(MIC<MICBrkpt+0.5),'\n')
+  cat('Number Resistant: ',sum(MIC>MICBrkpt+0.5),'\n')
   cat('Number of MIC censored: ',sum(xcens!=0),'\n')
   cat('Number of DIA censored: ',sum(ycens!=0),'\n')
   invisible()

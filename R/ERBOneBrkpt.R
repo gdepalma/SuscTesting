@@ -12,9 +12,9 @@ ERBOne=function(DIABrkpt,MIC,DIA,MICBrkpt,VM,M){
     #SS
     if(MIC[i]<=MICBrkpt & DIA[i]>=DIABrkpt) NumSS=NumSS+1
     #resistant
-    else if(MIC[i]>=MICBrkpt & DIA[i]<=DIABrkpt) NumRR=NumRR+1
+    else if(MIC[i]>MICBrkpt & DIA[i]<DIABrkpt) NumRR=NumRR+1
     #R MIC S DIA
-    else if(MIC[i]>=MICBrkpt & DIA[i]>=DIABrkpt) NumVM=NumVM+1
+    else if(MIC[i]>MICBrkpt & DIA[i]>=DIABrkpt) NumVM=NumVM+1
     #S MIC R DIA
     else if(MIC[i]<=MICBrkpt & DIA[i]<=DIABrkpt) NumM=NumM+1
   }
@@ -83,25 +83,6 @@ ERBGivenDIAOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,VM=1,M=5){
 }
 
 
-PlotBrkptsERB2One=function(MIC,DIA,xcens,ycens,VM,M,MICBrkpt,MICXaxis,log2MIC){
-
-
-  parms=findBrkptsERBOneC(MIC,DIA,VM,M,MICBrkpt)
-  DIABrkpt=parms$DIABrkpt
-
-  fit=plotBrkPtsERBOne(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,MICXaxis,log2MIC)
-  return(fit)
-}
-
-PlotBrkptsERBGivenOne=function(MIC,DIA,xcens,ycens,VM,M,MICBrkpt,DIABrkpt,MICXaxis,log2MIC){
-
-
-  fit=plotBrkPtsERBOne(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,MICXaxis,log2MIC)
-
-  return(fit)
-}
-
-
 #plot single scatterplot
 plotBrkPtsERBOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,MICXaxis,log2MIC){
 
@@ -117,9 +98,9 @@ plotBrkPtsERBOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,MICXaxis,log2MIC
     #SS
     if(MIC[i]<=MICBrkpt & DIA[i]>=DIABrkpt) classification[i]='Correct'
     #resistant
-    else if(MIC[i]>=MICBrkpt & DIA[i]<=DIABrkpt) classification[i]='Correct'
+    else if(MIC[i]>MICBrkpt & DIA[i]<DIABrkpt) classification[i]='Correct'
     #R MIC S DIA
-    else if(MIC[i]>=MICBrkpt & DIA[i]>=DIABrkpt) classification[i]='Very Major'
+    else if(MIC[i]>MICBrkpt & DIA[i]>=DIABrkpt) classification[i]='Very Major'
     #S MIC R DIA
     else if(MIC[i]<=MICBrkpt & DIA[i]<=DIABrkpt) classification[i]='Major'
   }
@@ -128,7 +109,7 @@ plotBrkPtsERBOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,MICXaxis,log2MIC
   a1$classification=factor(a1$classification,levels=c("Correct","Major","Very Major"))
 
   MICBrkpt=MICBrkpt+.5
-  DIABrkpt=DIABrkpt+.5
+  DIABrkpt=DIABrkpt-.5
 
   if(log2MIC==TRUE){
     MICBrkpt=2^MICBrkpt

@@ -1,4 +1,6 @@
 library(SuscTesting)
+library('devtools')
+install_github('gdepalma/StanBayesianErrorsMonoModels')
 library(StanBayesianErrorsMonoModels)
 
 # nobs=400
@@ -28,9 +30,9 @@ MIC=parms$MIC; DIA=parms$DIA; xcens=parms$xcens; ycens=parms$ycens
 MICBrkptL=-1
 MICBrkptU=1
 MICBrkpt=0
-DIABrkptL=22
-DIABrkptU=31
-DIABrkpt=30
+DIABrkptL=34
+DIABrkptU=39
+DIABrkpt=38
 
 ### Descriptive Stats
 descriptiveStat(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU)
@@ -50,13 +52,12 @@ findBrkptsERB(MIC,DIA,VM1=10,M1=10,m1=40,VM2=2,M2=2,m2=5,MICBrkptL,MICBrkptU,min
 plotBrkPtsERB(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkptL,DIABrkptU,MICXaxis=FALSE,log2MIC=FALSE)
 ERBGivenDIA(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkptL,DIABrkptU,VM1=10,M1=10,m1=40,VM2=2,M2=2,m2=5)
 
-# Boot
 
 ### ERB One Breakpoint
 parms=findBrkptsERBOne(MIC,DIA,VM=1,M=5,MICBrkpt)
 DIABrkpt=parms$DIABrkpt
 ERBGivenDIAOne(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,VM=1,M=5)
-plotBrkPtsERBOne(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,MICXaxis=FALSE,log2MIC=FALSE)
+plotBrkPtsERBOne(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,MICXaxis=TRUE,log2MIC=TRUE)
 
 # Boot
 bootData=bootStrapERB(MIC,DIA,MICBrkptL,MICBrkptU,VM1=10,M1=10,m1=40,VM2=2,M2=2,m2=5,
@@ -77,6 +78,7 @@ ycensu=rep(0,N)
 ycensu[ycens==1] = 1
 dat_sav=data.frame(xobs=MIC,yobs=DIA,xcensl,xcensu,ycensu,ycensl)
 list_of_draws = stan_logistic.fit(dat_sav,xgrid,nchains=1)
+list_of_draws = stan_spline.fit(dat_sav,xgrid,nchains=1)
 
 
 parms=output_graphs(list_of_draws,xgrid,dat_sav)
