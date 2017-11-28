@@ -327,12 +327,10 @@ findDIAC=function(DIA,xgrid,weights,fit,MICBrkptL,MICBrkptU,xsig,ysig,minWidth,m
   return(list(D1=D1,D2=D2,index=index))
 }
 
-getDIABrkptsModel_two=function(model_output,xgrid,MICBrkptL,MICBrkptU,xsig=.707,ysig=2.121,minWidth=3,
+getDIABrkptsModel_two=function(model_output,xgrid,DIA,MICBrkptL,MICBrkptU,xsig=.707,ysig=2.121,minWidth=3,
                                maxWidth=12,minDIA=min(DIA)+2,maxDIA=max(DIA)-2){
   MIC_Dens=model_output$MIC_Dens
   gx=model_output$gx
-
-  xsig=.707;ysig=2.121;minWidth=3;maxWidth=12;minDIA=min(DIA)+2;maxDIA=max(DIA)-2
 
   DIA_Brkpts=matrix(NA,nrow=nrow(MIC_Dens),ncol=2)
   for(i in 1:nrow(MIC_Dens)){
@@ -340,8 +338,63 @@ getDIABrkptsModel_two=function(model_output,xgrid,MICBrkptL,MICBrkptU,xsig=.707,
     DIA_Brkpts[i,1]=parms$D1
     DIA_Brkpts[i,2]=parms$D2
   }
-  table(DIA_Brkpts[,1],DIA_Brkpts[,2])
+  a1=as.data.frame(table(DIA_Brkpts[,1],DIA_Brkpts[,2]))
+  names(a1)=c('DIA_L','DIA_U','Freq')
+  a1 = a1 %>% arrange(desc(Freq)) %>% mutate(Percent=format(round(Freq/sum(Freq)*100),nsmall=2),
+                                             CumPerc=format(round(cumsum(Freq)/sum(Freq)*100),nsmall=2)) %>%
+          select(-Freq)
 
+  return(a1)
+}
+
+findDIACOne=function(DIA,xgrid,weights,fit,MICBrkpt,xsig,ysig){
+
+  DIABrkpt=0; index=0
+  lgrid=length(xgrid)
+  MICBrkpt=MICBrkpt-.5
+  MTrue=MICBrkpt-.5
+  minDIA=min(DIA)+2
+  maxDIA=max(DIA)-2
+  storage.mode(xgrid) <- "double"
+  storage.mode(weights) <- "double"
+  storage.mode(fit) <- "double"
+  storage.mode(MICBrkpt) <- "double"
+  storage.mode(MTrue) <- "double"
+  storage.mode(xsig) <- "double"
+  storage.mode(ysig) <- "double"
+  storage.mode(minDIA) <- "double"
+  storage.mode(maxDIA) <- "double"
+  storage.mode(lgrid) <- "integer"
+  storage.mode(DIABrkpt) <- "double"
+  storage.mode(index) <- "double"
+  temp=.C("findDIATrueOne",xgrid,weights,fit,MICBrkpt,MTrue,
+          xsig,ysig,minDIA,maxDIA,lgrid,DIABrkpt,index)
+  DIABrkpt=temp[[11]]
+  index=temp[[12]]
+  #   print(c(D1,D2,index))
+
+  return(list(DIABrkpt=DIABrkpt,index=index))
 
 }
 
+
+getDIABrkptsModel_one=function(model_output,xgrid,DIA,MICBrkpt,xsig=.707,ysig=2.121){
+
+  MIC_Dens=model_output$MIC_Dens
+  gx=model_output$gx
+
+  xsig=.707;ysig=2.121;minWidth=3;maxWidth=12;minDIA=min(DIA)+2;maxDIA=max(DIA)-2
+
+  DIA_Brkpt=rep(NA,nrow=nrow(MIC_Dens))
+  for(i in 1:nrow(MIC_Dens)){
+    parms=findDIACOne(DIA,xgrid,MIC_Dens[i,],gx[i,],MICBrkpt,xsig,ysig)
+    DIA_Brkpt[i]=parms$DIABrkpt
+  }
+  a1=as.data.frame(table(DIA_Brkpt))
+  names(a1)=c('DIA','Freq')
+  a1 = a1 %>% arrange(desc(Freq)) %>% mutate(Percent=format(round(Freq/sum(Freq)*100),nsmall=2),
+                                             CumPerc=format(round(cumsum(Freq)/sum(Freq)*100),nsmall=2)) %>%
+    select(-Freq)
+
+  return(a1)
+}

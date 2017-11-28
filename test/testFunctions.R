@@ -80,13 +80,16 @@ dat_sav=data.frame(xobs=MIC,yobs=DIA,xcensl,xcensu,ycensu,ycensl)
 list_of_draws_logistic = stan_logistic.fit(dat_sav,xgrid,nchains=1)
 list_of_draws_spline = stan_spline.fit(dat_sav,xgrid,nchains=1)
 
+# Brkpts
+a1=getDIABrkptsModel_two(list_of_draws_logistic,xgrid,DIA,MICBrkptL,MICBrkptU)
+a1=getDIABrkptsModel_one(list_of_draws_logistic,xgrid,DIA,MICBrkpt)
+
 
 output_graph_one_model_twoMIC(list_of_draws_logistic,xgrid,dat_sav,MICBrkptL,MICBrkptU)
 output_graph_one_model_oneMIC(list_of_draws_spline,xgrid,dat_sav,MICBrkpt)
 
 
-# Brkpts
-getDIABrkptsModel(list_of_draws_logistic,yobs,MICBrkptL,MICBrkptU)
+
 
 
 ### Compare Fits
