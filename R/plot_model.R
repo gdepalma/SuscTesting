@@ -60,9 +60,7 @@ output_graph_one_model_twoMIC=function(list_of_draws,xgrid,dat_sav,MICBrkptL,MIC
             labels = c(paste("<",min(xobs1),sep=''),seq(min(xobs1),max(xobs1),by=1), paste(">",max(xobs1),sep='')),
             limits = c(min(xobs1)-1,max(xobs1)+1))+
     scale_y_continuous(breaks = seq(min(yobs1)-1,max(yobs1)+1,by=1),
-            labels = c(paste("<",min(yobs1),sep=''),seq(min(yobs1),max(yobs1),by=1), paste(">",max(yobs1),sep='')),
-            limits = c(min(yobs1)-1,max(yobs1)+1))+
-    theme_fivethirtyeight()+
+            labels = c(paste("<",min(yobs1),sep=''),seq(min(yobs1),max(yobs1),by=1), paste(">",max(yobs1),sep='')))+    theme_fivethirtyeight()+
     theme(axis.line = element_line(colour = "black"),
           legend.position='none',
           panel.grid.major = element_line(color='gray90'),
@@ -71,7 +69,9 @@ output_graph_one_model_twoMIC=function(list_of_draws,xgrid,dat_sav,MICBrkptL,MIC
           axis.text.y=element_text(size=8),
           axis.title=element_text(size=11),
           plot.title=element_text(size=15))+
-    labs(title='Logistic Model',y='DIA (mm)',x="")
+    labs(title='Logistic Model',y='DIA (mm)',x="")+
+    coord_cartesian(ylim =c(min(yobs)-1,max(yobs)+1))
+
 
 
   plt1 <- ggplot_gtable(ggplot_build(pltRel))

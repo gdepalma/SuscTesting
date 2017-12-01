@@ -1,6 +1,6 @@
 library(SuscTesting)
-library('devtools')
-install_github('gdepalma/StanBayesianErrorsMonoModels')
+# library('devtools')
+# install_github('gdepalma/StanBayesianErrorsMonoModels')
 library(StanBayesianErrorsMonoModels)
 
 # nobs=400
@@ -77,15 +77,18 @@ ycensl[ycens==-1] = 1
 ycensu=rep(0,N)
 ycensu[ycens==1] = 1
 dat_sav=data.frame(xobs=MIC,yobs=DIA,xcensl,xcensu,ycensu,ycensl)
-list_of_draws_logistic = stan_logistic.fit(dat_sav,xgrid,nchains=1)
-list_of_draws_spline = stan_spline.fit(dat_sav,xgrid,nchains=1)
+list_of_draws_logistic = stan_logistic.fit(dat_sav,xgrid,nchains=1,numIter=3000)
+list_of_draws_spline = stan_spline.fit(dat_sav,xgrid,nchains=1,numIter=3000)
 
 # Brkpts
-a1=getDIABrkptsModel_two(list_of_draws_logistic,xgrid,DIA,MICBrkptL,MICBrkptU)
+a1=getDIABrkptsModel_two(list_of_draws_spline,xgrid,DIA,MICBrkptL,MICBrkptU)
+a1
 a1=getDIABrkptsModel_one(list_of_draws_logistic,xgrid,DIA,MICBrkpt)
-
+a1
 
 output_graph_one_model_twoMIC(list_of_draws_logistic,xgrid,dat_sav,MICBrkptL,MICBrkptU)
+output_graph_one_model_twoMIC(list_of_draws_spline,xgrid,dat_sav,MICBrkptL,MICBrkptU)
+
 output_graph_one_model_oneMIC(list_of_draws_spline,xgrid,dat_sav,MICBrkpt)
 
 
