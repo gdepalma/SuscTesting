@@ -327,21 +327,20 @@ findDIAC=function(DIA,xgrid,weights,fit,MICBrkptL,MICBrkptU,xsig,ysig,minWidth,m
   return(list(D1=D1,D2=D2,index=index))
 }
 
-getDIABrkptsModel_two=function(model_output,xgrid,DIA,MICBrkptL,MICBrkptU,xsig=.707,ysig=2.121,minWidth=3,
+getDIABrkptsModel_two=function(MICDens,gx,xgrid,DIA,MICBrkptL,MICBrkptU,xsig=.707,ysig=2.121,minWidth=3,
                                maxWidth=12,minDIA=min(DIA)+2,maxDIA=max(DIA)-2){
-  MIC_Dens=model_output$MIC_Dens
-  gx=model_output$gx
 
-  DIA_Brkpts=matrix(NA,nrow=nrow(MIC_Dens),ncol=2)
-  for(i in 1:nrow(MIC_Dens)){
-    parms=findDIAC(DIA,xgrid,MIC_Dens[i,],gx[i,],MICBrkptL,MICBrkptU,xsig,ysig,minWidth,maxWidth,minDIA,maxDIA)
+  DIA_Brkpts=matrix(NA,nrow=nrow(MICDens),ncol=2)
+  for(i in 1:nrow(MICDens)){
+    parms=findDIAC(DIA,xgrid,MICDens[i,],gx[i,],MICBrkptL,MICBrkptU,xsig,ysig,minWidth,maxWidth,minDIA,maxDIA)
     DIA_Brkpts[i,1]=parms$D1
     DIA_Brkpts[i,2]=parms$D2
   }
   a1=as.data.frame(table(DIA_Brkpts[,1],DIA_Brkpts[,2]))
   names(a1)=c('DIA_L','DIA_U','Freq')
+  print(a1)
   a1 = a1 %>% arrange(desc(Freq)) %>% mutate(Percent=format(round(Freq/sum(Freq)*100),nsmall=2),
-                                             CumPerc=format(round(cumsum(Freq)/sum(Freq)*100),nsmall=2)) %>%
+          CumPerc=format(round(cumsum(Freq)/sum(Freq)*100),nsmall=2)) %>%
           select(-Freq)
 
   return(a1)
@@ -378,23 +377,4 @@ findDIACOne=function(DIA,xgrid,weights,fit,MICBrkpt,xsig,ysig){
 }
 
 
-getDIABrkptsModel_one=function(model_output,xgrid,DIA,MICBrkpt,xsig=.707,ysig=2.121){
 
-  MIC_Dens=model_output$MIC_Dens
-  gx=model_output$gx
-
-  xsig=.707;ysig=2.121;minWidth=3;maxWidth=12;minDIA=min(DIA)+2;maxDIA=max(DIA)-2
-
-  DIA_Brkpt=rep(NA,nrow=nrow(MIC_Dens))
-  for(i in 1:nrow(MIC_Dens)){
-    parms=findDIACOne(DIA,xgrid,MIC_Dens[i,],gx[i,],MICBrkpt,xsig,ysig)
-    DIA_Brkpt[i]=parms$DIABrkpt
-  }
-  a1=as.data.frame(table(DIA_Brkpt))
-  names(a1)=c('DIA','Freq')
-  a1 = a1 %>% arrange(desc(Freq)) %>% mutate(Percent=format(round(Freq/sum(Freq)*100),nsmall=2),
-                                             CumPerc=format(round(cumsum(Freq)/sum(Freq)*100),nsmall=2)) %>%
-    select(-Freq)
-
-  return(a1)
-}

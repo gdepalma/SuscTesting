@@ -1,7 +1,7 @@
 library(SuscTesting)
 # library('devtools')
-# install_github('gdepalma/StanBayesianErrorsMonoModels')
-library(StanBayesianErrorsMonoModels)
+# install_github('gdepalma/BayesianMonoErrorModels')
+library(BayesianMonoErrorModels)
 
 # nobs=400
 # xcens=rep(0,nobs)
@@ -67,30 +67,17 @@ bootStrapERBOne(MIC,DIA,MICBrkpt)
 
 ### Model
 xgrid=seq(min(MIC)-1,max(MIC)+1,length=1000)
-N=length(MIC)
-xcensl=rep(0,N)
-xcensl[xcens==-1] = 1
-xcensu=rep(0,N)
-xcensu[xcens==1] = 1
-ycensl=rep(0,N)
-ycensl[ycens==-1] = 1
-ycensu=rep(0,N)
-ycensu[ycens==1] = 1
-dat_sav=data.frame(xobs=MIC,yobs=DIA,xcensl,xcensu,ycensu,ycensl)
-list_of_draws_logistic = stan_logistic.fit(dat_sav,xgrid,nchains=1,numIter=3000)
-list_of_draws_spline = stan_spline.fit(dat_sav,xgrid,nchains=1,numIter=3000)
+parms=run_logistic_model(xobs=MIC,yobs=DIA,xcens,ycens)
+MICDens=parms$MICDens; gx=parms$fitMat
 
 # Brkpts
-a1=getDIABrkptsModel_two(list_of_draws_spline,xgrid,DIA,MICBrkptL,MICBrkptU)
+a1=getDIABrkptsModel_two(MICDens,gx,xgrid,DIA,MICBrkptL,MICBrkptU)
 a1
-a1=getDIABrkptsModel_one(list_of_draws_logistic,xgrid,DIA,MICBrkpt)
+a1=getDIABrkptsModel_one(MICDens,gx,xgrid,DIA,MICBrkpt)
 a1
 
-output_graph_one_model_twoMIC(list_of_draws_logistic,xgrid,dat_sav,MICBrkptL,MICBrkptU)
-output_graph_one_model_twoMIC(list_of_draws_spline,xgrid,dat_sav,MICBrkptL,MICBrkptU)
-
-output_graph_one_model_oneMIC(list_of_draws_spline,xgrid,dat_sav,MICBrkpt)
-
+output_graph_one_model_two(MICDens,gx,xgrid,dat_sav,MICBrkptL,MICBrkptU)
+output_graph_one_model_one(MICDens,gx,xgrid,dat_sav,MICBrkptL,MICBrkptU
 
 
 

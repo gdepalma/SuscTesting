@@ -1,9 +1,9 @@
 
 compareFitsPlotOne=function(dataSpline,dataLog,MIC,DIA,xcens,ycens,MICBrkpt,flipGraph,logConvert){
-      
+
   logData=data.frame(grid=xgrid,fit=dataLog$fit)
   splineData=data.frame(grid=xgrid,fit=dataSpline$fit)
-  
+
   xobs=MIC
   yobs=DIA
   xobs1=xobs
@@ -14,7 +14,7 @@ compareFitsPlotOne=function(dataSpline,dataLog,MIC,DIA,xcens,ycens,MICBrkpt,flip
   yobs[ycens==-1 & yobs==min(yobs)]=min(yobs)-1
   a1=data.frame(xobs,yobs)
   a1=count(a1,c('xobs','yobs'))
-  
+
   if(flipGraph=='Yes' && logConvert==TRUE){
     fit=ggplot(a1,aes(xobs,yobs))+geom_text(aes(label=freq),size=5)+
       geom_line(data=logData,aes(x=grid,y=fit))+
@@ -31,7 +31,7 @@ compareFitsPlotOne=function(dataSpline,dataLog,MIC,DIA,xcens,ycens,MICBrkpt,flip
             plot.title = element_text(size = 17, hjust=0.5,vjust=1))
   }
   if(flipGraph=='Yes' && logConvert==FALSE){
-    
+
     MICBrkpt=2^MICBrkpt
     a1$xobs=2^a1$xobs
     MIC2=MIC
@@ -40,7 +40,7 @@ compareFitsPlotOne=function(dataSpline,dataLog,MIC,DIA,xcens,ycens,MICBrkpt,flip
     x=2^(min(MIC2):max(MIC2))
     logData$grid=2^logData$grid
     splineData$grid=2^splineData$grid
-        
+
     fit=ggplot(a1,aes(xobs,yobs))+geom_text(aes(label=freq),size=5)+
       geom_line(data=logData,aes(x=grid,y=fit))+
       geom_line(data=splineData,aes(x=grid,y=fit,color='red'))+
@@ -72,7 +72,7 @@ compareFitsPlotOne=function(dataSpline,dataLog,MIC,DIA,xcens,ycens,MICBrkpt,flip
             plot.title = element_text(size = 17, hjust=0.5,vjust=1))
   }
   if(flipGraph=='No' &&  logConvert==FALSE){
-    
+
     MICBrkpt=2^MICBrkpt
     a1$xobs=2^a1$xobs
     MIC2=MIC
@@ -81,7 +81,7 @@ compareFitsPlotOne=function(dataSpline,dataLog,MIC,DIA,xcens,ycens,MICBrkpt,flip
     x=2^(min(MIC2):max(MIC2))
     logData$grid=2^logData$grid
     splineData$grid=2^splineData$grid
-        
+
     fit=ggplot(a1,aes(yobs,xobs))+geom_text(aes(label=freq),size=5)+
       geom_line(data=logData,aes(x=fit,y=grid))+
       geom_line(data=splineData,aes(x=fit,y=grid,color='red'))+
@@ -96,52 +96,52 @@ compareFitsPlotOne=function(dataSpline,dataLog,MIC,DIA,xcens,ycens,MICBrkpt,flip
            limits = c(min(DIA1)-1,max(DIA1)+1))+
       theme(legend.position='NONE',
             plot.title = element_text(size = 17, hjust=0.5,vjust=1))
-  }    
-  
+  }
+
   return(fit)
 }
 
 
 probDIAClassOne=function(data,MICBrkpt,DIA1,DIA2){
-    
+
   MICBrkpt=MICBrkpt-.5
   MTrue=MICBrkpt-.5
-  
+
   f=data$fit
   density=data$dens
-  
+
   e=sqrt(.5^2+.5^2)
   t=sqrt(1.5^2+1.5^2)
-  
+
   grid=xgrid[xgrid>=min(MIC) & xgrid<=max(MIC)]
   weights=density[xgrid>=min(MIC) & xgrid<=max(MIC)]
   f=f[xgrid>=min(MIC) & xgrid<=max(MIC)]
   weights=weights/sum(weights)
-  
+
   DIABrkpt1=DIA1
   if(is.na(DIA2)==TRUE){
     DIABrkpt2=0
   }else{
-    DIABrkpt2=DIA2 
+    DIABrkpt2=DIA2
   }
-  
+
   probDIAC=rep(NA,length(grid))
   probDIAIC=rep(NA,length(grid))
   probDIAC1=rep(NA,length(grid))
   probDIAIC1=rep(NA,length(grid))
   probMIC=rep(NA,length(grid))
-  
+
   ### DIA Probs
   for(i in 1:length(grid)){
     d=f[i]
     m=grid[i]
-    
+
     ### MIC
     #Susceptible
     if (m<=MTrue)  probMIC[i]=pnorm(MICBrkpt,m,e)
     #resistant
     if(m>MTrue) probMIC[i]=1-pnorm(MICBrkpt,m,e)
-    
+
     ###DIA
     #Susceptible
     if(m<=MTrue){
@@ -155,7 +155,7 @@ probDIAClassOne=function(data,MICBrkpt,DIA1,DIA2){
     probDIAIC[i]=1-probDIAC[i]
     probDIAIC1[i]=1-probDIAC1[i]
   }
-  
+
 
   ### Print DIA
   if(is.na(DIA2)==FALSE){
@@ -173,7 +173,7 @@ probDIAClassOne=function(data,MICBrkpt,DIA1,DIA2){
     name.width <- max(sapply(names(temp), nchar))
     names(temp) <- format(names(temp), width = name.width, justify = "centre")
     print(format(temp, width = name.width, justify = "centre"),row.names=FALSE,quote=FALSE)
-    
+
 	  CorrectM=sum(probMIC*weights)
     Correct1=sum(probDIAC*weights)
     Correct2=sum(probDIAC1*weights)
@@ -185,7 +185,7 @@ probDIAClassOne=function(data,MICBrkpt,DIA1,DIA2){
     name.width <- max(sapply(names(temp), nchar))
     names(temp) <- format(names(temp), width = name.width, justify = "centre")
     print(format(temp, width = name.width, justify = "centre"),row.names=FALSE,quote=FALSE)
-    
+
     a1=data.frame(grid,probDIAC,probDIAC1,probMIC,weights)
   }else{
     cat('DIA Breakpoint: ',DIABrkpt1,'\n',sep='')
@@ -199,7 +199,7 @@ probDIAClassOne=function(data,MICBrkpt,DIA1,DIA2){
     name.width <- max(sapply(names(temp), nchar))
     names(temp) <- format(names(temp), width = name.width, justify = "centre")
     print(format(temp, width = name.width, justify = "centre"),row.names=FALSE,quote=FALSE)
-    
+
     Correct1=sum(probDIAC*weights)
 	  CorrectM=sum(probMIC*weights)
     cat('\nProbability Correct Classification Weighted by Isolate Distribution \n')
@@ -210,18 +210,18 @@ probDIAClassOne=function(data,MICBrkpt,DIA1,DIA2){
     name.width <- max(sapply(names(temp), nchar))
     names(temp) <- format(names(temp), width = name.width, justify = "centre")
     print(format(temp, width = name.width, justify = "centre"),row.names=FALSE,quote=FALSE)
-    
+
     a1=data.frame(grid,probDIAC,probDIAC1,probMIC,weights)
   }
-  
+
   return(a1)
-  
+
 }
 
 plotUnderlyingDistibutionOne=function(a1,logConvert,MICBrkpt){
-  
+
   MICBrkpt=MICBrkpt-1
-  
+
   if(logConvert==TRUE){
     plt=ggplot(a1,aes(x=grid,y=weights))+geom_area(alpha=.3,fill='red',color='black')+
       labs(x='',y='',title='Isolate Distribution')+
@@ -229,12 +229,12 @@ plotUnderlyingDistibutionOne=function(a1,logConvert,MICBrkpt){
       scale_x_continuous(breaks = seq(round(min(xgrid)),round(max(xgrid)),by=1),limits=c(min(MIC),max(MIC)))+
       theme(plot.title = element_text(size = 17, hjust=0.5,vjust=1))
   }else{
-    
+
     MICBrkpt=2^MICBrkpt
     a1$grid=2^a1$grid
     MICTemp=min(MIC):max(MIC)
     MICTemp=2^MICTemp
-    
+
     plt=ggplot(a1,aes(x=grid,y=weights))+geom_area(alpha=.3,fill='red',color='black')+
       labs(x='',y='',title='Isolate Distribution')+
       geom_vline(xintercept=MICBrkpt,lty=2,alpha=1)+
@@ -243,36 +243,36 @@ plotUnderlyingDistibutionOne=function(a1,logConvert,MICBrkpt){
                          breaks=MICTemp)+
       theme(plot.title = element_text(size = 17, hjust=0.5,vjust=1))
   }
-  
+
   return(plt)
-  
+
 }
 
 plotProbDIAClassOne=function(a1,MICBrkpt,DIA1,DIA2,logConvert){
-  
+
   MICBrkpt=MICBrkpt-1
   xgrid=a1$grid
   probDIAC=a1$probDIAC
   if(is.na(DIA2)==FALSE)
     probDIAC1=a1$probDIAC1
   probMIC=a1$probMIC
-  
-  
+
+
   grid1=xgrid[xgrid<MICBrkpt-.02]
   grid2=xgrid[xgrid>MICBrkpt+.02]
-  
+
   probMIC1=probMIC[xgrid<MICBrkpt-.02]
   probMIC2=probMIC[xgrid>MICBrkpt+.02]
-  
+
   ProbCorrectDIA1=probDIAC[xgrid<MICBrkpt-.02]
   ProbCorrectDIA2=probDIAC[xgrid>MICBrkpt+.02]
-  
+
   if(is.na(DIA2)==FALSE){
     ProbCorrectDIA11=probDIAC1[xgrid<MICBrkpt-.02]
     ProbCorrectDIA21=probDIAC1[xgrid>MICBrkpt+.02]
   }
-  
-  
+
+
   if(is.na(DIA2)==FALSE){
     a1=data.frame(grid=c(grid1,grid1,grid1),probC=c(probMIC1,ProbCorrectDIA1,ProbCorrectDIA11),
                   group=c(rep(0,length(grid1)),rep(1,length(grid1)),rep(2,length(grid1))))
@@ -294,7 +294,7 @@ plotProbDIAClassOne=function(a1,MICBrkpt,DIA1,DIA2,logConvert){
     a2$Breakpoints=factor(a2$Breakpoints,levels=c("MIC ",paste('DIA 1: ',DIA1,sep=''),
           paste('DIA 2: ',DIA2,sep='')))
 
-    
+
     if(logConvert==TRUE){
       fit=ggplot(a1,aes(x=grid,y=value,color=Breakpoints))+geom_line()+
         geom_line(data=a2,aes(x=grid,y=value,color=Breakpoints))+
@@ -310,7 +310,7 @@ plotProbDIAClassOne=function(a1,MICBrkpt,DIA1,DIA2,logConvert){
           legend.title=element_text(size=15))
     }
     if(logConvert==FALSE){
-      
+
       MICBrkpt=2^MICBrkpt
       a1$grid=2^a1$grid
       a2$grid=2^a2$grid
@@ -349,7 +349,7 @@ plotProbDIAClassOne=function(a1,MICBrkpt,DIA1,DIA2,logConvert){
 
     a1$Breakpoints=factor(a1$Breakpoints,levels=c("MIC ",paste('DIA: ',DIA1,sep='')))
     a2$Breakpoints=factor(a2$Breakpoints,levels=c("MIC ",paste('DIA: ',DIA1,sep='')))
-    
+
     if(logConvert==TRUE){
       fit=ggplot(a1,aes(x=grid,y=value,color=Breakpoints))+geom_line()+
         geom_line(data=a2,aes(x=grid,y=value,color=Breakpoints))+
@@ -370,7 +370,7 @@ plotProbDIAClassOne=function(a1,MICBrkpt,DIA1,DIA2,logConvert){
       a2$grid=2^a2$grid
       MICTemp=min(MIC):max(MIC)
       MICTemp=2^MICTemp
-      
+
       fit=ggplot(a1,aes(x=grid,y=value,color=Breakpoints))+geom_line()+
         geom_line(data=a2,aes(x=grid,y=value,color=Breakpoints))+
         geom_vline(xintercept=MICBrkpt,lty=2,alpha=.5)+
@@ -387,15 +387,15 @@ plotProbDIAClassOne=function(a1,MICBrkpt,DIA1,DIA2,logConvert){
           legend.title=element_text(size=15))
     }
   }
-  
-  
+
+
   return(fit)
-  
-  
+
+
 }
 
 findDIACOne=function(yobs,gridx,weights,fit,MICBrkpt,xsig,ysig){
-  
+
   DIABrkpt=0; index=0
   lgrid=length(gridx)
   MICBrkpt=MICBrkpt-.5
@@ -419,8 +419,24 @@ findDIACOne=function(yobs,gridx,weights,fit,MICBrkpt,xsig,ysig){
   DIABrkpt=temp[[11]]
   index=temp[[12]]
   #   print(c(D1,D2,index))
-  
+
   return(list(DIABrkpt=DIABrkpt,index=index))
-  
+
+}
+
+getDIABrkptsModel_one=function(MICDens,gx,xgrid,DIA,MICBrkpt,xsig=.707,ysig=2.121){
+
+  DIA_Brkpt=rep(NA,nrow=nrow(MICDens))
+  for(i in 1:nrow(MICDens)){
+    parms=findDIACOne(DIA,xgrid,MICDens[i,],gx[i,],MICBrkpt,xsig,ysig)
+    DIA_Brkpt[i]=parms$DIABrkpt
+  }
+  a1=as.data.frame(table(DIA_Brkpt))
+  names(a1)=c('DIA','Freq')
+  a1 = a1 %>% arrange(desc(Freq)) %>% mutate(Percent=format(round(Freq/sum(Freq)*100),nsmall=2),
+                                             CumPerc=format(round(cumsum(Freq)/sum(Freq)*100),nsmall=2)) %>%
+    select(-Freq)
+
+  return(a1)
 }
 

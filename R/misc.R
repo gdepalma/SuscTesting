@@ -14,16 +14,31 @@ parse_data=function(a1){
 
   xcens=rep(0,nrow(a1))
   ycens=rep(0,nrow(a1))
-  MIC=a1$MIC
-  DIA=a1$DIA
+  xobs=rep(NA,nrow(a1))
+  yobs=rep(NA,nrow(a1))
 
-  xcens[grepl('>',a1$MIC)]=1
-  xcens[grepl('<',a1$MIC)]=-1
-  ycens[grepl('>',a1$DIA)]=1
-  ycens[grepl('<',a1$DIA)]=-1
+  for(i in 1:nrow(a1)){
+    if(grepl('>',a1[i,1])==TRUE){
+      xobs[i]=substr(a1[i,1],2,nchar(a1[i,1]))
+      xcens[i]=1
+    }else if(grepl('<',a1[i,1])==TRUE){
+      xobs[i]=substr(a1[i,1],2,nchar(a1[i,1]))
+      xcens[i]=-1
+    }else
+      xobs[i]=a1[i,1]
 
-  MIC=as.numeric(MIC)
-  DIA=as.numeric(DIA)
+    if(grepl('>',a1[i,2])==TRUE){
+      yobs[i]=substr(a1[i,2],2,nchar(a1[i,2]))
+      ycens[i]=1
+    }else if(grepl('<',a1[i,2])==TRUE){
+      yobs[i]=substr(a1[i,2],2,nchar(a1[i,2]))
+      ycens[i]=-1
+    }else
+      yobs[i]=a1[i,2]
+  }
+
+  xobs=as.numeric(xobs)
+  yobs=as.numeric(yobs)
 
   return(list(MIC=MIC,DIA=DIA,xcens=xcens,ycens=ycens))
 
