@@ -68,21 +68,24 @@ bootStrapERBOne(MIC,DIA,MICBrkpt)
 ### Model
 xgrid=seq(min(MIC)-1,max(MIC)+1,length=1000)
 parms=run_logistic_model(xobs=MIC,yobs=DIA,xcens,ycens)
-MICDens=parms$MICDens; gx=parms$fitMat
+MICDens_1=parms$MICDens; gx_1=parms$fitMat
+
+parms=run_spline_model(xobs=MIC,yobs=DIA,xcens,ycens)
+MICDens_2=parms$MICDens; gx_2=parms$fitMat
 
 # Brkpts
-a1=getDIABrkptsModel_two(MICDens,gx,xgrid,DIA,MICBrkptL,MICBrkptU)
+a1=getDIABrkptsModel_twoMIC(MICDens_1,gx_1,xgrid,DIA,MICBrkptL,MICBrkptU)
 a1
-a1=getDIABrkptsModel_one(MICDens,gx,xgrid,DIA,MICBrkpt)
+a1=getDIABrkptsModel_oneMIC(MICDens_1,gx_1,xgrid,DIA,MICBrkpt)
 a1
 
-output_graph_one_model_two(MICDens,gx,xgrid,dat_sav,MICBrkptL,MICBrkptU)
-output_graph_one_model_one(MICDens,gx,xgrid,dat_sav,MICBrkptL,MICBrkptU
+output_graph_one_model_twoMIC(MICDens_1,gx_1,MIC,DIA,xcens,ycens,xgrid,MICBrkptL,MICBrkptU)
+output_graph_one_model_oneMIC(MICDens_1,gx_1,MIC,DIA,xcens,ycens,xgrid,MICBrkpt)
 
 
 
 
 ### Compare Fits
-output_graph_compare_twoMIC(list_of_draws_logistic,list_of_draws_spline,xgrid,dat_sav,MICBrkptL,MICBrkptU)
-output_graph_compare_oneMIC(list_of_draws_logistic,list_of_draws_spline,xgrid,dat_sav,MICBrkpt)
+output_graph_compare_twoMIC(MICDens_1,gx_1,MICDens_2,gx_2,MIC,DIA,xcens,ycens,xgrid,MICBrkptL,MICBrkptU)
+output_graph_compare_oneMIC(MICDens_1,gx_1,MICDens_2,gx_2,MIC,DIA,xcens,ycens,xgrid,MICBrkpt)
 

@@ -327,7 +327,7 @@ findDIAC=function(DIA,xgrid,weights,fit,MICBrkptL,MICBrkptU,xsig,ysig,minWidth,m
   return(list(D1=D1,D2=D2,index=index))
 }
 
-getDIABrkptsModel_twoMIC=function(MICDens,gx,xgrid,DIA,MICBrkptL,MICBrkptU,xsig=.707,ysig=2.121,minWidth=3,
+getDIABrkptsModel_two=function(MICDens,gx,xgrid,DIA,MICBrkptL,MICBrkptU,xsig=.707,ysig=2.121,minWidth=3,
                                maxWidth=12,minDIA=min(DIA)+2,maxDIA=max(DIA)-2){
 
   DIA_Brkpts=matrix(NA,nrow=nrow(MICDens),ncol=2)
@@ -338,9 +338,10 @@ getDIABrkptsModel_twoMIC=function(MICDens,gx,xgrid,DIA,MICBrkptL,MICBrkptU,xsig=
   }
   a1=as.data.frame(table(DIA_Brkpts[,1],DIA_Brkpts[,2]))
   names(a1)=c('DIA_L','DIA_U','Freq')
+  print(a1)
   a1 = a1 %>% arrange(desc(Freq)) %>% mutate(Percent=format(round(Freq/sum(Freq)*100),nsmall=2),
           CumPerc=format(round(cumsum(Freq)/sum(Freq)*100),nsmall=2)) %>%
-          dplyr::select(-Freq) %>% dplyr::filter(Percent>.02)
+          dplyr::select(-Freq)
 
   return(a1)
 }

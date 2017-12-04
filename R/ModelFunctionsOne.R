@@ -394,15 +394,15 @@ plotProbDIAClassOne=function(a1,MICBrkpt,DIA1,DIA2,logConvert){
 
 }
 
-findDIACOne=function(yobs,gridx,weights,fit,MICBrkpt,xsig,ysig){
+findDIACOne=function(DIA,xgrid,weights,fit,MICBrkpt,xsig,ysig){
 
   DIABrkpt=0; index=0
-  lgrid=length(gridx)
+  lgrid=length(xgrid)
   MICBrkpt=MICBrkpt-.5
   MTrue=MICBrkpt-.5
-  minDIA=min(yobs)
-  maxDIA=max(yobs)
-  storage.mode(gridx) <- "double"
+  minDIA=min(DIA)+2
+  maxDIA=max(DIA)-2
+  storage.mode(xgrid) <- "double"
   storage.mode(weights) <- "double"
   storage.mode(fit) <- "double"
   storage.mode(MICBrkpt) <- "double"
@@ -414,7 +414,7 @@ findDIACOne=function(yobs,gridx,weights,fit,MICBrkpt,xsig,ysig){
   storage.mode(lgrid) <- "integer"
   storage.mode(DIABrkpt) <- "double"
   storage.mode(index) <- "double"
-  temp=.C("findDIATrueOne",gridx,weights,fit,MICBrkpt,MTrue,
+  temp=.C("findDIATrueOne",xgrid,weights,fit,MICBrkpt,MTrue,
           xsig,ysig,minDIA,maxDIA,lgrid,DIABrkpt,index)
   DIABrkpt=temp[[11]]
   index=temp[[12]]
@@ -424,7 +424,8 @@ findDIACOne=function(yobs,gridx,weights,fit,MICBrkpt,xsig,ysig){
 
 }
 
-getDIABrkptsModel_one=function(MICDens,gx,xgrid,DIA,MICBrkpt,xsig=.707,ysig=2.121){
+
+getDIABrkptsModel_oneMIC=function(MICDens,gx,xgrid,DIA,MICBrkpt,xsig=.707,ysig=2.121){
 
   DIA_Brkpt=rep(NA,nrow=nrow(MICDens))
   for(i in 1:nrow(MICDens)){
@@ -435,7 +436,7 @@ getDIABrkptsModel_one=function(MICDens,gx,xgrid,DIA,MICBrkpt,xsig=.707,ysig=2.12
   names(a1)=c('DIA','Freq')
   a1 = a1 %>% arrange(desc(Freq)) %>% mutate(Percent=format(round(Freq/sum(Freq)*100),nsmall=2),
                                              CumPerc=format(round(cumsum(Freq)/sum(Freq)*100),nsmall=2)) %>%
-    select(-Freq)
+    dplyr::select(-Freq) %>% dplyr::filter(Percent>.02)
 
   return(a1)
 }
