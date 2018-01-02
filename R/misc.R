@@ -40,6 +40,6 @@ parse_data=function(a1){
   xobs=as.numeric(xobs)
   yobs=as.numeric(yobs)
 
-  return(list(MIC=MIC,DIA=DIA,xcens=xcens,ycens=ycens))
+  return(list(MIC=xobs,DIA=yobs,xcens=xcens,ycens=ycens))
 
 }
