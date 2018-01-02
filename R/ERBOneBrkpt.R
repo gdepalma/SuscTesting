@@ -122,7 +122,7 @@ plotBrkPtsERBOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,MICXaxis,log2MIC
 
   if(MICXaxis==TRUE && log2MIC==FALSE){
     fit=ggplot(a1,aes(MIC,DIA))+geom_text(aes(label=Freq,color=factor(classification)),size=4)+
-      geom_point(aes(group=factor(classification),color=factor(classification)),size=0)+
+      geom_point(aes(group=factor(classification),color=factor(classification)),size=-1)+
       geom_vline(xintercept=MICBrkpt,lty=2,alpha=.4)+
       geom_hline(yintercept=DIABrkpt,lty=2,alpha=.4)+
       labs(x='MIC (Dilution Test in log(ug/mL))',y='DIA (Diffusion Test in mm)')+
@@ -144,7 +144,7 @@ plotBrkPtsERBOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,MICXaxis,log2MIC
 
 
     fit=ggplot(a1,aes(MIC,DIA))+geom_text(aes(label=Freq,color=factor(classification)),size=4)+
-      geom_point(aes(group=factor(classification),color=factor(classification)),size=0)+
+      geom_point(aes(group=factor(classification),color=factor(classification)),size=-1)+
       geom_vline(xintercept=MICBrkpt,lty=2,alpha=.4)+
       geom_hline(yintercept=DIABrkpt,lty=2,alpha=.4)+
       labs(x='MIC (Dilution Test in ug/mL)',y='DIA (Diffusion Test in mm)')+
@@ -165,7 +165,7 @@ plotBrkPtsERBOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,MICXaxis,log2MIC
   }
   if(MICXaxis==FALSE && log2MIC==FALSE){
     fit=ggplot(a1,aes(DIA,MIC))+geom_text(aes(label=Freq,color=factor(classification)),size=4)+
-      geom_point(aes(group=factor(classification),color=factor(classification)),size=0)+
+      geom_point(aes(group=factor(classification),color=factor(classification)),size=-1)+
       geom_hline(yintercept=MICBrkpt,lty=2,alpha=.4)+
       geom_vline(xintercept=DIABrkpt,lty=2,alpha=.4)+
       labs(y='MIC (Dilution Test in log(ug/mL))',x='DIA (Diffusion Test in mm)')+
@@ -186,7 +186,7 @@ plotBrkPtsERBOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,MICXaxis,log2MIC
   if(MICXaxis==FALSE && log2MIC==TRUE){
 
     fit=ggplot(a1,aes(DIA,MIC))+geom_text(aes(label=Freq,color=factor(classification)),size=4)+
-      geom_point(aes(group=factor(classification),color=factor(classification)),size=0)+
+      geom_point(aes(group=factor(classification),color=factor(classification)),size=-1)+
       geom_hline(yintercept=MICBrkpt,lty=2,alpha=.4)+
       geom_vline(xintercept=DIABrkpt,lty=2,alpha=.4)+
       labs(y='MIC (Dilution Test in ug/mL)',x='DIA (Diffusion Test in mm)')+

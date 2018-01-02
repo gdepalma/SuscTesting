@@ -270,7 +270,7 @@ plotBrkPtsERB=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkptL,DIABrkp
 
   if(MICXaxis==TRUE && log2MIC==FALSE){
     fit=ggplot(a1,aes(MIC,DIA))+geom_text(aes(label=Freq,color=factor(classification)),size=4)+
-      geom_point(aes(group=factor(classification),color=factor(classification)),size=0)+
+      geom_point(aes(group=factor(classification),color=factor(classification)),size=-1)+
       geom_vline(xintercept=MICBrkptL,lty=2,alpha=.4)+
       geom_vline(xintercept=MICBrkptU,lty=2,alpha=.4)+
       geom_hline(yintercept=DIABrkptL,lty=2,alpha=.4)+
@@ -295,7 +295,7 @@ plotBrkPtsERB=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkptL,DIABrkp
   if(MICXaxis==TRUE && log2MIC==TRUE){
 
     fit=ggplot(a1,aes(MIC,DIA))+geom_text(aes(label=Freq,color=factor(classification)),size=4)+
-      geom_point(aes(group=factor(classification),color=factor(classification)),size=0)+
+      geom_point(aes(group=factor(classification),color=factor(classification)),size=-1)+
       geom_vline(xintercept=MICBrkptL,lty=2,alpha=.4)+
       geom_vline(xintercept=MICBrkptU,lty=2,alpha=.4)+
       geom_hline(yintercept=DIABrkptL,lty=2,alpha=.4)+
@@ -318,7 +318,7 @@ plotBrkPtsERB=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkptL,DIABrkp
   }
   if(MICXaxis==FALSE && log2MIC==FALSE){
     fit=ggplot(a1,aes(DIA,MIC))+geom_text(aes(label=Freq,color=factor(classification)),size=4)+
-      geom_point(aes(group=factor(classification),color=factor(classification)),size=0)+
+      geom_point(aes(group=factor(classification),color=factor(classification)),size=-1)+
       geom_hline(yintercept=MICBrkptL,lty=2,alpha=.4)+
       geom_hline(yintercept=MICBrkptU,lty=2,alpha=.4)+
       geom_vline(xintercept=DIABrkptL,lty=2,alpha=.4)+
@@ -342,7 +342,7 @@ plotBrkPtsERB=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkptL,DIABrkp
   if(MICXaxis==FALSE && log2MIC==TRUE){
 
     fit=ggplot(a1,aes(DIA,MIC))+geom_text(aes(label=Freq,color=factor(classification)),size=4)+
-      geom_point(aes(group=factor(classification),color=factor(classification)),size=0)+
+      geom_point(aes(group=factor(classification),color=factor(classification)),size=-1)+
       geom_hline(yintercept=MICBrkptL,lty=2,alpha=.4)+
       geom_hline(yintercept=MICBrkptU,lty=2,alpha=.4)+
       geom_vline(xintercept=DIABrkptL,lty=2,alpha=.4)+
