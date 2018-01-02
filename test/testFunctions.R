@@ -79,13 +79,17 @@ a1
 a1=getDIABrkptsModel_oneMIC(MICDens_1,gx_1,xgrid,DIA,MICBrkpt)
 a1
 
-output_graph_one_model_twoMIC(MICDens_1,gx_1,MIC,DIA,xcens,ycens,xgrid,MICBrkptL,MICBrkptU)
-output_graph_one_model_oneMIC(MICDens_1,gx_1,MIC,DIA,xcens,ycens,xgrid,MICBrkpt)
+plt=output_graph_one_model_twoMIC(MICDens_1,gx_1,MIC,DIA,xcens,ycens,xgrid,MICBrkptL,MICBrkptU)
+grid::grid.draw(plt)
+plt=output_graph_one_model_oneMIC(MICDens_1,gx_1,MIC,DIA,xcens,ycens,xgrid,MICBrkpt)
+grid::grid.draw(plt)
 
 
 
 
 ### Compare Fits
-output_graph_compare_twoMIC(MICDens_1,gx_1,MICDens_2,gx_2,MIC,DIA,xcens,ycens,xgrid,MICBrkptL,MICBrkptU)
-output_graph_compare_oneMIC(MICDens_1,gx_1,MICDens_2,gx_2,MIC,DIA,xcens,ycens,xgrid,MICBrkpt)
+plt=output_graph_compare_twoMIC(MICDens_1,gx_1,MICDens_2,gx_2,MIC,DIA,xcens,ycens,xgrid,MICBrkptL,MICBrkptU)
+grid::grid.draw(plt)
+plt=output_graph_compare_oneMIC(MICDens_1,gx_1,MICDens_2,gx_2,MIC,DIA,xcens,ycens,xgrid,MICBrkpt)
+grid::grid.draw(plt)
 

@@ -61,14 +61,9 @@ output_graph_one_model_twoMIC=function(MICDens,gx,xobs,yobs,xcens,ycens,xgrid,MI
     labs(title='',y='DIA (mm)',x="")+
     coord_cartesian(ylim =c(min(yobs)-1,max(yobs)+1))
 
-  plt1 <- ggplot_gtable(ggplot_build(pltRel))
-  plt2 <- ggplot_gtable(ggplot_build(pltDens))
-  maxWidth = unit.pmax(plt1$widths[2:3], plt2$widths[2:3])
-  plt1$widths[2:3] <- maxWidth
-  plt2$widths[2:3] <- maxWidth
-  plot(grid.arrange(plt1, plt2, ncol=1, heights=c(5,2)))
+  plt <- gridExtra::arrangeGrob(pltRel, pltDens,ncol=1, heights=c(5,2))
 
-  return(invisible())
+  return(plt)
 
 }
 
@@ -134,14 +129,10 @@ output_graph_one_model_oneMIC=function(MICDens,gx,xobs,yobs,xcens,ycens,xgrid,MI
 
 
 
-  plt1 <- ggplot_gtable(ggplot_build(pltRel))
-  plt2 <- ggplot_gtable(ggplot_build(pltDens))
-  maxWidth = unit.pmax(plt1$widths[2:3], plt2$widths[2:3])
-  plt1$widths[2:3] <- maxWidth
-  plt2$widths[2:3] <- maxWidth
-  plot(grid.arrange(plt1, plt2, ncol=1, heights=c(5,2)))
+  plt <- gridExtra::arrangeGrob(pltRel, pltDens,ncol=1, heights=c(5,2))
 
-  return(invisible())
+
+  return(plt)
 
 }
 
@@ -210,14 +201,9 @@ output_graph_compare_twoMIC=function(MICDens_1,gx_1,MICDens_2,gx_2,xobs,yobs,xce
 
 
 
-  plt1 <- ggplot_gtable(ggplot_build(pltRel))
-  plt2 <- ggplot_gtable(ggplot_build(pltDens))
-  maxWidth = unit.pmax(plt1$widths[2:3], plt2$widths[2:3])
-  plt1$widths[2:3] <- maxWidth
-  plt2$widths[2:3] <- maxWidth
-  plot(grid.arrange(plt1, plt2, ncol=1, heights=c(5,2)))
+  plt <- gridExtra::arrangeGrob(pltRel, pltDens,ncol=1, heights=c(5,2))
 
-  return(invisible())
+  return(plt)
 
 }
 
@@ -294,13 +280,9 @@ output_graph_compare_oneMIC=function(MICDens_1,gx_1,MICDens_2,gx_2,MIC,DIA,xcens
     labs(title='Logistic Model',y='DIA (mm)',x="")
 
 
-  plt1 <- ggplot_gtable(ggplot_build(pltRel))
-  plt2 <- ggplot_gtable(ggplot_build(pltDens))
-  maxWidth = unit.pmax(plt1$widths[2:3], plt2$widths[2:3])
-  plt1$widths[2:3] <- maxWidth
-  plt2$widths[2:3] <- maxWidth
-  plot(grid.arrange(plt1, plt2, ncol=1, heights=c(5,2)))
+  plt <- gridExtra::arrangeGrob(pltRel, pltDens,ncol=1, heights=c(5,2))
 
-  return(invisible())
+
+  return(plt)
 
 }
