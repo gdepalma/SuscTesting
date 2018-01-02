@@ -75,9 +75,7 @@ basicPlotOne=function(MIC,DIA,xcens,ycens,MICBrkpt,MICXaxis,log2MIC){
       theme_dbets()
   }
 
-  print(fit)
-  invisible()
-
+  return(fit)
 }
 
 
@@ -165,8 +163,7 @@ basicPlot=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,MICXaxis,log2MIC){
       theme_dbets()
   }
 
-  plot(fit)
-  invisible()
+  return(fit)
 }
 
 descriptiveStat=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU){
