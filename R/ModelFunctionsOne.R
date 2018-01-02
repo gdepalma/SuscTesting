@@ -436,7 +436,7 @@ getDIABrkptsModel_oneMIC=function(MICDens,gx,xgrid,DIA,MICBrkpt,xsig=.707,ysig=2
   names(a1)=c('DIA','Freq')
   a1 = a1 %>% arrange(desc(Freq)) %>% mutate(Percent=format(round(Freq/sum(Freq)*100),nsmall=2),
                                              CumPerc=format(round(cumsum(Freq)/sum(Freq)*100),nsmall=2)) %>%
-    dplyr::select(-Freq) %>% dplyr::filter(Percent>.02)
+    dplyr::select(-Freq)
 
   return(a1)
 }
