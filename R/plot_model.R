@@ -31,8 +31,8 @@ output_graph_one_model_twoMIC=function(MICDens,gx,xobs,yobs,xcens,ycens,xgrid,MI
           panel.grid.minor = element_blank(),
           axis.text=element_text(size=11),
           axis.title=element_text(size=11),
-          plot.title=element_text(size=15))+
-    labs(title='',y='',x=expression(MIC~(log["2"]~ug/mL)))
+          plot.title=element_text(size=13))+
+    labs(title='MIC Density',y='',x=expression(MIC~(log["2"]~ug/mL)))
 
   ### MIC/DIA Relationship
   gxDat=data_frame(xgrid,y=apply(gx,2,mean))
@@ -57,8 +57,8 @@ output_graph_one_model_twoMIC=function(MICDens,gx,xobs,yobs,xcens,ycens,xgrid,MI
           axis.text.x=element_text(size=11),
           axis.text.y=element_text(size=8),
           axis.title=element_text(size=11),
-          plot.title=element_text(size=15))+
-    labs(title='',y='DIA (mm)',x="")+
+          plot.title=element_text(size=13))+
+    labs(title='MIC/DIA Relationship',y='DIA (mm)',x="")+
     coord_cartesian(ylim =c(min(yobs)-1,max(yobs)+1))
 
   plt <- gridExtra::arrangeGrob(pltRel, pltDens,ncol=1, heights=c(5,2))
@@ -100,8 +100,8 @@ output_graph_one_model_oneMIC=function(MICDens,gx,xobs,yobs,xcens,ycens,xgrid,MI
           panel.grid.minor = element_blank(),
           axis.text=element_text(size=11),
           axis.title=element_text(size=11),
-          plot.title=element_text(size=15))+
-    labs(title='',y='',x=expression(MIC~(log["2"]~ug/mL)))
+          plot.title=element_text(size=13))+
+    labs(title='MIC Density',y='',x=expression(MIC~(log["2"]~ug/mL)))
 
   ### MIC/DIA Relationship
   gxDat=data_frame(xgrid,y=apply(gx,2,mean))
@@ -123,8 +123,8 @@ output_graph_one_model_oneMIC=function(MICDens,gx,xobs,yobs,xcens,ycens,xgrid,MI
           axis.text.x=element_text(size=11),
           axis.text.y=element_text(size=8),
           axis.title=element_text(size=11),
-          plot.title=element_text(size=15))+
-    labs(title='',y='DIA (mm)',x="")+
+          plot.title=element_text(size=13))+
+    labs(title='MIC/DIA Relationship',y='DIA (mm)',x="")+
     coord_cartesian(ylim =c(min(yobs)-1,max(yobs)+1))
 
 
@@ -175,9 +175,9 @@ output_graph_compare_twoMIC=function(MICDens_log,gx_log,MICDens_spline,gx_spline
           panel.grid.minor = element_blank(),
           axis.text=element_text(size=11),
           axis.title=element_text(size=11),
-          plot.title=element_text(size=15),
+          plot.title=element_text(size=13),
           legend.title=element_blank())+
-    labs(title='',y='',x=expression(MIC~(log["2"]~ug/mL)))
+    labs(title='MIC Density',y='',x=expression(MIC~(log["2"]~ug/mL)))
 
   ### MIC/DIA Relationship
   gxDat1=data_frame(xgrid,y=apply(gx_log,2,mean))
@@ -208,8 +208,8 @@ output_graph_compare_twoMIC=function(MICDens_log,gx_log,MICDens_spline,gx_spline
           axis.text.x=element_text(size=11),
           axis.text.y=element_text(size=8),
           axis.title=element_text(size=11),
-          plot.title=element_text(size=15))+
-    labs(title='',y='DIA (mm)',x="")+
+          plot.title=element_text(size=13))+
+    labs(title='MIC/DIA Relationship',y='DIA (mm)',x="")+
     coord_cartesian(ylim =c(min(yobs)-1,max(yobs)+1))
 
 
@@ -258,9 +258,9 @@ output_graph_compare_oneMIC=function(MICDens_log,gx_log,MICDens_spline,gx_spline
           panel.grid.minor = element_blank(),
           axis.text=element_text(size=11),
           axis.title=element_text(size=11),
-          plot.title=element_text(size=15),
+          plot.title=element_text(size=13),
           legend.title=element_blank())+
-    labs(title='',y='',x=expression(MIC~(log["2"]~ug/mL)))
+    labs(title='MIC Density',y='',x=expression(MIC~(log["2"]~ug/mL)))
 
 
   ### MIC/DIA Relationship
@@ -291,8 +291,8 @@ output_graph_compare_oneMIC=function(MICDens_log,gx_log,MICDens_spline,gx_spline
           axis.text.x=element_text(size=11),
           axis.text.y=element_text(size=8),
           axis.title=element_text(size=11),
-          plot.title=element_text(size=15))+
-    labs(title='',y='DIA (mm)',x="")
+          plot.title=element_text(size=13))+
+    labs(title='MIC/DIA Relationship',y='DIA (mm)',x="")
 
 
   plt <- gridExtra::arrangeGrob(pltRel, pltDens,ncol=1, heights=c(5,2))
