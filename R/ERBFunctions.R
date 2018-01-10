@@ -258,7 +258,7 @@ plotBrkPtsERB=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkptL,DIABrkp
   DIABrkptL=DIABrkptL+.5
   DIABrkptU=DIABrkptU-.5
 
-  if(log2MIC==TRUE){
+  if(log2MIC==FALSE){
     MICBrkptL=2^MICBrkptL
     MICBrkptU=2^MICBrkptU
     MIC2=MIC1
@@ -268,7 +268,7 @@ plotBrkPtsERB=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkptL,DIABrkp
     x=2^(min(MIC1):max(MIC1))
   }
 
-  if(MICXaxis==TRUE && log2MIC==FALSE){
+  if(MICXaxis==TRUE && log2MIC==TRUE){
     fit=ggplot(a1,aes(MIC,DIA))+geom_text(aes(label=Freq,color=factor(classification)),size=4)+
       geom_point(aes(group=factor(classification),color=factor(classification)),size=-1)+
       geom_vline(xintercept=MICBrkptL,lty=2,alpha=.4)+
@@ -292,7 +292,7 @@ plotBrkPtsERB=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkptL,DIABrkp
 
 
   }
-  if(MICXaxis==TRUE && log2MIC==TRUE){
+  if(MICXaxis==TRUE && log2MIC==FALSE){
 
     fit=ggplot(a1,aes(MIC,DIA))+geom_text(aes(label=Freq,color=factor(classification)),size=4)+
       geom_point(aes(group=factor(classification),color=factor(classification)),size=-1)+
@@ -316,7 +316,7 @@ plotBrkPtsERB=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkptL,DIABrkp
         legend.key=element_rect(fill="gray95",colour="white"),
         legend.text = element_text(size = 14))
   }
-  if(MICXaxis==FALSE && log2MIC==FALSE){
+  if(MICXaxis==FALSE && log2MIC==TRUE){
     fit=ggplot(a1,aes(DIA,MIC))+geom_text(aes(label=Freq,color=factor(classification)),size=4)+
       geom_point(aes(group=factor(classification),color=factor(classification)),size=-1)+
       geom_hline(yintercept=MICBrkptL,lty=2,alpha=.4)+
@@ -339,7 +339,7 @@ plotBrkPtsERB=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,DIABrkptL,DIABrkp
         legend.text = element_text(size = 14))
 
   }
-  if(MICXaxis==FALSE && log2MIC==TRUE){
+  if(MICXaxis==FALSE && log2MIC==FALSE){
 
     fit=ggplot(a1,aes(DIA,MIC))+geom_text(aes(label=Freq,color=factor(classification)),size=4)+
       geom_point(aes(group=factor(classification),color=factor(classification)),size=-1)+

@@ -14,7 +14,7 @@ basicPlotOne=function(MIC,DIA,xcens,ycens,MICBrkpt,MICXaxis,log2MIC){
   M1=MICBrkpt+.5
 
   ### For log_2 graphs
-  if(log2MIC==TRUE){
+  if(log2MIC==FALSE){
     M1=2^(MICBrkpt+0.5)
     a1$MIC=2^a1$MIC
     MICTemp=c(min(MIC1)-1,min(MIC1):max(MIC1),max(MIC1)+1)
@@ -23,7 +23,7 @@ basicPlotOne=function(MIC,DIA,xcens,ycens,MICBrkpt,MICXaxis,log2MIC){
   }
 
 
-  if(MICXaxis==TRUE && log2MIC==FALSE){
+  if(MICXaxis==TRUE && log2MIC==TRUE){
     fit=ggplot(a1,aes(MIC,DIA))+geom_text(aes(label=Freq),size=4)+
       geom_vline(xintercept=M1,lty=2,alpha=.5)+
       labs(x='MIC (Dilution Test in log(ug/mL))',y='DIA (Diffusion Test in mm)')+
@@ -35,7 +35,7 @@ basicPlotOne=function(MIC,DIA,xcens,ycens,MICBrkpt,MICXaxis,log2MIC){
                          limits = c(min(DIA1)-1,max(DIA1)+1))+
       theme_dbets()
   }
-  if(MICXaxis==TRUE && log2MIC==TRUE){
+  if(MICXaxis==TRUE && log2MIC==FALSE){
     fit=ggplot(a1,aes(MIC,DIA))+geom_text(aes(label=Freq),size=4)+
       geom_vline(xintercept=M1,lty=2,alpha=.5)+
       labs(x='MIC (Dilution Test in ug/mL)',y='DIA (Diffusion Test in mm)')+
@@ -48,7 +48,7 @@ basicPlotOne=function(MIC,DIA,xcens,ycens,MICBrkpt,MICXaxis,log2MIC){
                          labels=c(paste("<",min(x),sep=''),sort(unique(x)), paste(">",max(x),sep='')))+
       theme_dbets()
   }
-  if(MICXaxis==FALSE && log2MIC==FALSE){
+  if(MICXaxis==FALSE && log2MIC==TRUE){
     fit=ggplot(a1,aes(DIA,MIC))+geom_text(aes(label=Freq),size=4)+
       geom_hline(yintercept=M1,lty=2,alpha=.5)+
       labs(y='MIC (Dilution Test in log(ug/mL))',x='DIA (Diffusion Test in mm)')+
@@ -60,7 +60,7 @@ basicPlotOne=function(MIC,DIA,xcens,ycens,MICBrkpt,MICXaxis,log2MIC){
                          limits = c(min(DIA1)-1,max(DIA1)+1))+
       theme_dbets()
   }
-  if(MICXaxis==FALSE && log2MIC==TRUE){
+  if(MICXaxis==FALSE && log2MIC==FALSE){
 
     fit=ggplot(a1,aes(DIA,MIC))+geom_text(aes(label=Freq),size=4)+
       geom_hline(yintercept=M1,lty=2,alpha=.5)+
