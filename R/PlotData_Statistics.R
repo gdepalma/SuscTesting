@@ -96,7 +96,7 @@ basicPlot=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,MICXaxis,log2MIC){
   a1=a1[a1$Freq>0,]
 
   ### For log_2 graphs
-  if(log2MIC==TRUE){
+  if(log2MIC==FALSE){
     MICBrkptL=2^MICBrkptL
     MICBrkptU=2^MICBrkptU
     a1$MIC=2^a1$MIC
@@ -105,7 +105,7 @@ basicPlot=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,MICXaxis,log2MIC){
     x=2^(min(MIC1):max(MIC1))
   }
 
-  if(MICXaxis==TRUE && log2MIC==FALSE){
+  if(MICXaxis==TRUE && log2MIC==TRUE){
     fit=ggplot(a1,aes(MIC,DIA))+geom_text(aes(label=Freq),size=4)+
       geom_vline(xintercept=MICBrkptL,lty=2,alpha=.5)+
       geom_vline(xintercept=MICBrkptU,lty=2,alpha=.5)+
@@ -119,7 +119,7 @@ basicPlot=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,MICXaxis,log2MIC){
       theme_dbets()
 
   }
-  if(MICXaxis==TRUE && log2MIC==TRUE){
+  if(MICXaxis==TRUE && log2MIC==FALSE){
 
     fit=ggplot(a1,aes(MIC,DIA))+geom_text(aes(label=Freq),size=4)+
       geom_vline(xintercept=MICBrkptL,lty=2,alpha=.5)+
@@ -134,7 +134,7 @@ basicPlot=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,MICXaxis,log2MIC){
                          labels=c(paste("<",min(x),sep=''),sort(unique(x)), paste(">",max(x),sep='')))+
       theme_dbets()
   }
-  if(MICXaxis==FALSE && log2MIC==FALSE){
+  if(MICXaxis==FALSE && log2MIC==TRUE){
     fit=ggplot(a1,aes(DIA,MIC))+geom_text(aes(label=Freq),size=4)+
       geom_hline(yintercept=MICBrkptL,lty=2,alpha=.5)+
       geom_hline(yintercept=MICBrkptU,lty=2,alpha=.5)+
@@ -147,7 +147,7 @@ basicPlot=function(MIC,DIA,xcens,ycens,MICBrkptL,MICBrkptU,MICXaxis,log2MIC){
                          limits = c(min(DIA1)-1,max(DIA1)+1))+
       theme_dbets()
   }
-  if(MICXaxis==FALSE && log2MIC==TRUE){
+  if(MICXaxis==FALSE && log2MIC==FALSE){
 
     fit=ggplot(a1,aes(DIA,MIC))+geom_text(aes(label=Freq),size=4)+
       geom_hline(yintercept=MICBrkptL,lty=2,alpha=.5)+

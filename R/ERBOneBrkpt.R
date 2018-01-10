@@ -111,7 +111,7 @@ plotBrkPtsERBOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,MICXaxis,log2MIC
   MICBrkpt=MICBrkpt+.5
   DIABrkpt=DIABrkpt-.5
 
-  if(log2MIC==TRUE){
+  if(log2MIC==FALSE){
     MICBrkpt=2^MICBrkpt
     MIC2=MIC1
     a1$MIC=2^a1$MIC
@@ -120,7 +120,7 @@ plotBrkPtsERBOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,MICXaxis,log2MIC
     x=2^(min(MIC2):max(MIC2))
   }
 
-  if(MICXaxis==TRUE && log2MIC==FALSE){
+  if(MICXaxis==TRUE && log2MIC==TRUE){
     fit=ggplot(a1,aes(MIC,DIA))+geom_text(aes(label=Freq,color=factor(classification)),size=4)+
       geom_point(aes(group=factor(classification),color=factor(classification)),size=-1)+
       geom_vline(xintercept=MICBrkpt,lty=2,alpha=.4)+
@@ -140,7 +140,7 @@ plotBrkPtsERBOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,MICXaxis,log2MIC
         legend.text = element_text(size = 15))+
       guides(colour = guide_legend(override.aes = list(size=5,alpha = 1)))
   }
-  if(MICXaxis==TRUE && log2MIC==TRUE){
+  if(MICXaxis==TRUE && log2MIC==FALSE){
 
 
     fit=ggplot(a1,aes(MIC,DIA))+geom_text(aes(label=Freq,color=factor(classification)),size=4)+
@@ -163,7 +163,7 @@ plotBrkPtsERBOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,MICXaxis,log2MIC
         legend.text = element_text(size = 14))+
       guides(colour = guide_legend(override.aes = list(size=3,alpha = 1)))
   }
-  if(MICXaxis==FALSE && log2MIC==FALSE){
+  if(MICXaxis==FALSE && log2MIC==TRUE){
     fit=ggplot(a1,aes(DIA,MIC))+geom_text(aes(label=Freq,color=factor(classification)),size=4)+
       geom_point(aes(group=factor(classification),color=factor(classification)),size=-1)+
       geom_hline(yintercept=MICBrkpt,lty=2,alpha=.4)+
@@ -183,7 +183,7 @@ plotBrkPtsERBOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,MICXaxis,log2MIC
         legend.text = element_text(size = 14))+
       guides(colour = guide_legend(override.aes = list(size=3,alpha = 1)))
   }
-  if(MICXaxis==FALSE && log2MIC==TRUE){
+  if(MICXaxis==FALSE && log2MIC==FALSE){
 
     fit=ggplot(a1,aes(DIA,MIC))+geom_text(aes(label=Freq,color=factor(classification)),size=4)+
       geom_point(aes(group=factor(classification),color=factor(classification)),size=-1)+
