@@ -30,7 +30,6 @@ ERBOne=function(DIABrkpt,MIC,DIA,MICBrkpt,VM,M){
 }
 
 
-#finds optimum DIA given breakpoints M1 and M2 error rate bounded method
 findBrkptsERBOne=function(MIC,DIA,VM=1,M=5,MICBrkpt){
 
   #find optimal
@@ -60,7 +59,7 @@ findBrkptsERBOne=function(MIC,DIA,VM=1,M=5,MICBrkpt){
 
 
 
-ERBGivenDIAOne=function(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,VM=1,M=5){
+ERBGivenDIAOne=function(MIC,DIA,MICBrkpt,DIABrkpt,VM=1,M=5){
 
 
   N=length(MIC)

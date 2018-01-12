@@ -11,14 +11,14 @@ double findERBBrkpts(int D1,int D2,double *MIC, double *DIA,double MICBrkpt1,dou
   double index;
 
   for(i=0; i<N; i++){
-    if(MIC[i]<=MICBrkpt1 & DIA[i]>=D2)SS=SS+1;
-    else if ((MIC[i]>MICBrkpt1 & MIC[i]<MICBrkpt2) & (DIA[i]>D1 & DIA[i]<D2)) II=II+1;
-    else if(MIC[i]>=MICBrkpt2 & DIA[i]<=D1) RR=RR+1;
+    if((MIC[i]<=MICBrkpt1) & (DIA[i]>=D2))SS=SS+1;
+    else if ((MIC[i]>MICBrkpt1) & (MIC[i]<MICBrkpt2) & (DIA[i]>D1) & (DIA[i]<D2)) II=II+1;
+    else if((MIC[i]>=MICBrkpt2) & (DIA[i]<=D1)) RR=RR+1;
     else if((MIC[i]>MICBrkpt1) & (MIC[i]<MICBrkpt2) & (DIA[i]>=D2)) m=m+1;
-    else if(MIC[i]>=MICBrkpt2 & DIA[i]>=D2) VM=VM+1;
-    else if((MIC[i]<=MICBrkpt1) & (DIA[i]>D1 & DIA[i]<D2)) m=m+1;
-    else if((MIC[i]>=MICBrkpt2) & (DIA[i]>D1 & DIA[i]<D2)) m=m+1;
-    else if(MIC[i]<=MICBrkpt1 & DIA[i]<=D1) M=M+1;
+    else if((MIC[i]>=MICBrkpt2) & (DIA[i]>=D2)) VM=VM+1;
+    else if((MIC[i]<=MICBrkpt1) & (DIA[i]>D1) & (DIA[i]<D2)) m=m+1;
+    else if((MIC[i]>=MICBrkpt2) & (DIA[i]>D1) & (DIA[i]<D2)) m=m+1;
+    else if((MIC[i]<=MICBrkpt1) & (DIA[i]<=D1)) M=M+1;
     else if((MIC[i]>MICBrkpt1) & (MIC[i]<MICBrkpt2) & (DIA[i]<=D1)) m=m+1;
   }
 
@@ -39,7 +39,7 @@ void ERB(int *minDIA, int *maxDIA, double *MICWithinTwo, double *MICOutsideTwo, 
 
   for(x=*minDIA; x<(*maxDIA-2); x++){
     for(y=(x+1); y<*maxDIA; y++){
-      if((y-x)>=*minWidth & (y-x)<=*maxWidth){
+      if(((y-x)>=*minWidth) & ((y-x)<=*maxWidth)){
         if(*N1>0)
           idx1=findERBBrkpts(x,y,MICWithinTwo,DIAWithinTwo,*MICBrkpt1,*MICBrkpt2,*N1,*VM1,*M1,*m1,*VM2,*M2,*m2);
         else idx1=0;

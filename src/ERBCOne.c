@@ -10,10 +10,10 @@ double findERBBrkptsOne(double DIABrkpt,double *MIC, double *DIA,double MICBrkpt
   double index;
 
   for(i=0; i<N; i++){
-    if(MIC[i]<=MICBrkpt & DIA[i]>=DIABrkpt) SS=SS+1;
-    else if(MIC[i]>=MICBrkpt & DIA[i]<=DIABrkpt) RR=RR+1;
-    else if(MIC[i]>=MICBrkpt & DIA[i]>=DIABrkpt) numVM=numVM+1;
-    else if(MIC[i]<=MICBrkpt & DIA[i]<=DIABrkpt) numM=numM+1;
+    if((MIC[i]<=MICBrkpt) & (DIA[i]>=DIABrkpt)) SS=SS+1;
+    else if((MIC[i]>=MICBrkpt) & (DIA[i]<=DIABrkpt)) RR=RR+1;
+    else if((MIC[i]>=MICBrkpt) & (DIA[i]>=DIABrkpt)) numVM=numVM+1;
+    else if((MIC[i]<=MICBrkpt) & (DIA[i]<=DIABrkpt)) numM=numM+1;
   }
 
 
