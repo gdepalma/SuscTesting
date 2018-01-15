@@ -13,7 +13,7 @@ output_graph_one_model_twoMIC=function(MICDens,gx,xobs,yobs,xcens,ycens,xgrid,MI
   a1=a1[a1$Freq>0,]
 
   ### MIC Density
-  densDat=data_frame(xgrid,y=apply(MICDens,2,mean))
+  densDat=data_frame(xgrid,y=apply(MICDens,2,median))
   densDat$lower=apply(MICDens,2,function(x) quantile(x,probs=c(.05)))
   densDat$upper=apply(MICDens,2,function(x) quantile(x,probs=c(.95)))
 
@@ -35,7 +35,7 @@ output_graph_one_model_twoMIC=function(MICDens,gx,xobs,yobs,xcens,ycens,xgrid,MI
     labs(title='MIC Density',y='',x=expression(MIC~(log["2"]~ug/mL)))
 
   ### MIC/DIA Relationship
-  gxDat=data_frame(xgrid,y=apply(gx,2,mean))
+  gxDat=data_frame(xgrid,y=apply(gx,2,median))
   gxDat$lower=apply(gx,2,function(x) quantile(x,probs=c(.05)))
   gxDat$upper=apply(gx,2,function(x) quantile(x,probs=c(.95)))
 
@@ -83,7 +83,7 @@ output_graph_one_model_oneMIC=function(MICDens,gx,xobs,yobs,xcens,ycens,xgrid,MI
 
 
   ### MIC Density
-  densDat=data_frame(xgrid,y=apply(MICDens,2,mean))
+  densDat=data_frame(xgrid,y=apply(MICDens,2,median))
   densDat$lower=apply(MICDens,2,function(x) quantile(x,probs=c(.05)))
   densDat$upper=apply(MICDens,2,function(x) quantile(x,probs=c(.95)))
 
@@ -104,7 +104,7 @@ output_graph_one_model_oneMIC=function(MICDens,gx,xobs,yobs,xcens,ycens,xgrid,MI
     labs(title='MIC Density',y='',x=expression(MIC~(log["2"]~ug/mL)))
 
   ### MIC/DIA Relationship
-  gxDat=data_frame(xgrid,y=apply(gx,2,mean))
+  gxDat=data_frame(xgrid,y=apply(gx,2,median))
   gxDat$lower=apply(gx,2,function(x) quantile(x,probs=c(.05)))
   gxDat$upper=apply(gx,2,function(x) quantile(x,probs=c(.95)))
 
@@ -151,11 +151,11 @@ output_graph_compare_twoMIC=function(MICDens_log,gx_log,MICDens_spline,gx_spline
   a1=a1[a1$Freq>0,]
 
   ### MIC Density
-  densDat1=data_frame(xgrid,y=apply(MICDens_log,2,mean))
+  densDat1=data_frame(xgrid,y=apply(MICDens_log,2,median))
   densDat1$lower=apply(MICDens_log,2,function(x) quantile(x,probs=c(.05)))
   densDat1$upper=apply(MICDens_log,2,function(x) quantile(x,probs=c(.95)))
   densDat1$group='Logistic'
-  densDat2=data_frame(xgrid,y=apply(MICDens_spline,2,mean))
+  densDat2=data_frame(xgrid,y=apply(MICDens_spline,2,median))
   densDat2$lower=apply(MICDens_spline,2,function(x) quantile(x,probs=c(.05)))
   densDat2$upper=apply(MICDens_spline,2,function(x) quantile(x,probs=c(.95)))
   densDat2$group='Spline'
@@ -180,11 +180,11 @@ output_graph_compare_twoMIC=function(MICDens_log,gx_log,MICDens_spline,gx_spline
     labs(title='MIC Density',y='',x=expression(MIC~(log["2"]~ug/mL)))
 
   ### MIC/DIA Relationship
-  gxDat1=data_frame(xgrid,y=apply(gx_log,2,mean))
+  gxDat1=data_frame(xgrid,y=apply(gx_log,2,median))
   gxDat1$lower=apply(gx_log,2,function(x) quantile(x,probs=c(.05)))
   gxDat1$upper=apply(gx_log,2,function(x) quantile(x,probs=c(.95)))
   gxDat1$group='Logistic'
-  gxDat2=data_frame(xgrid,y=apply(gx_spline,2,mean))
+  gxDat2=data_frame(xgrid,y=apply(gx_spline,2,median))
   gxDat2$lower=apply(gx_spline,2,function(x) quantile(x,probs=c(.05)))
   gxDat2$upper=apply(gx_spline,2,function(x) quantile(x,probs=c(.95)))
   gxDat2$group='Spline'
@@ -236,11 +236,11 @@ output_graph_compare_oneMIC=function(MICDens_log,gx_log,MICDens_spline,gx_spline
 
 
   ### MIC Density
-  densDat1=data_frame(xgrid,y=apply(MICDens_log,2,mean))
+  densDat1=data_frame(xgrid,y=apply(MICDens_log,2,median))
   densDat1$lower=apply(MICDens_log,2,function(x) quantile(x,probs=c(.05)))
   densDat1$upper=apply(MICDens_log,2,function(x) quantile(x,probs=c(.95)))
   densDat1$group='Logistic'
-  densDat2=data_frame(xgrid,y=apply(MICDens_spline,2,mean))
+  densDat2=data_frame(xgrid,y=apply(MICDens_spline,2,median))
   densDat2$lower=apply(MICDens_spline,2,function(x) quantile(x,probs=c(.05)))
   densDat2$upper=apply(MICDens_spline,2,function(x) quantile(x,probs=c(.95)))
   densDat2$group='Spline'
@@ -264,11 +264,11 @@ output_graph_compare_oneMIC=function(MICDens_log,gx_log,MICDens_spline,gx_spline
 
 
   ### MIC/DIA Relationship
-  gxDat1=data_frame(xgrid,y=apply(gx_log,2,mean))
+  gxDat1=data_frame(xgrid,y=apply(gx_log,2,median))
   gxDat1$lower=apply(gx_log,2,function(x) quantile(x,probs=c(.05)))
   gxDat1$upper=apply(gx_log,2,function(x) quantile(x,probs=c(.95)))
   gxDat1$group='Logistic'
-  gxDat2=data_frame(xgrid,y=apply(gx_spline,2,mean))
+  gxDat2=data_frame(xgrid,y=apply(gx_spline,2,median))
   gxDat2$lower=apply(gx_spline,2,function(x) quantile(x,probs=c(.05)))
   gxDat2$upper=apply(gx_spline,2,function(x) quantile(x,probs=c(.95)))
   gxDat2$group='Spline'

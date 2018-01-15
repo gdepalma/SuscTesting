@@ -29,7 +29,7 @@ probDIAClass=function(data,MICBrkptL,MICBrkptU,DIASet1,DIASet2){
   probDIAIC1=rep(NA,length(grid))
   probMIC=rep(NA,length(grid))
 
-  print(c(D1,D2))
+  # print(c(D1,D2))
 
   ### DIA Probs
   for(i in 1:length(grid)){
@@ -195,8 +195,14 @@ plotProbDIAClass=function(a1,M1,M2,DIASet1,DIASet2,logConvert){
         geom_vline(xintercept=M1,lty=2,alpha=.5)+
         geom_vline(xintercept=M2,lty=2,alpha=.5)+
         labs(x='MIC',y='Probability',title='Probability of Correct Classification (non-weighted)')+
+        theme_dbets()+
+        theme(
+          legend.position='bottom',
+          legend.text = element_text(size = 16),
+          legend.title=element_text(size=15))
         ylim(0,1)+
         scale_x_continuous(breaks = seq(round(min(xgrid)),round(max(xgrid)),by=1),limits=c(min(MIC),max(MIC)))
+
 
     }
     if(logConvert==FALSE){
@@ -215,6 +221,11 @@ plotProbDIAClass=function(a1,M1,M2,DIASet1,DIASet2,logConvert){
         labs(x='MIC',y='Probability',title='Probability of Correct Classification (non-weighted)')+
         ylim(0,1)+
         scale_x_continuous(trans=log2_trans(),limits=c(min(MICTemp),max(MICTemp)),breaks=MICTemp)
+        theme_dbets()+
+        theme(
+          legend.position='bottom',
+          legend.text = element_text(size = 16),
+          legend.title=element_text(size=15))
     }
   }
   if(is.na(DIASet2[1])==TRUE){
@@ -250,10 +261,9 @@ plotProbDIAClass=function(a1,M1,M2,DIASet1,DIASet2,logConvert){
         labs(x='MIC',y='Probability',title='Probability of Correct Classification (non-weighted)')+
         ylim(0,1)+
         scale_x_continuous(breaks = seq(round(min(xgrid)),round(max(xgrid)),by=1),limits=c(min(MIC),max(MIC)))+
+        theme_dbets()+
         theme(
-          plot.title = element_text(size = 17, hjust=0.5,vjust=1),
           legend.position='bottom',
-          legend.key=element_rect(fill="white",colour="white"),
           legend.text = element_text(size = 16),
           legend.title=element_text(size=15))
     }
@@ -275,10 +285,9 @@ plotProbDIAClass=function(a1,M1,M2,DIASet1,DIASet2,logConvert){
         scale_x_continuous(trans=log2_trans(),
                            limits=c(min(MICTemp),max(MICTemp)),
                            breaks=MICTemp)+
+        theme_dbets()+
         theme(
-          plot.title = element_text(size = 17, hjust=0.5,vjust=1),
           legend.position='bottom',
-          legend.key=element_rect(fill="white",colour="white"),
           legend.text = element_text(size = 16),
           legend.title=element_text(size=15))
     }

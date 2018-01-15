@@ -56,7 +56,7 @@ ERBGivenDIA(MIC,DIA,MICBrkptL,MICBrkptU,DIABrkptL,DIABrkptU,VM1=10,M1=10,m1=40,V
 ### ERB One Breakpoint
 parms=findBrkptsERBOne(MIC,DIA,VM=1,M=5,MICBrkpt)
 DIABrkpt=parms$DIABrkpt
-ERBGivenDIAOne(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,VM=1,M=5)
+ERBGivenDIAOne(MIC,DIA,MICBrkpt,DIABrkpt,VM=1,M=5)
 plotBrkPtsERBOne(MIC,DIA,xcens,ycens,MICBrkpt,DIABrkpt,MICXaxis=TRUE,log2MIC=TRUE)
 
 # Boot
@@ -92,4 +92,10 @@ plt=output_graph_compare_twoMIC(MICDens_log,gx_log,MICDens_spline,gx_spline,MIC,
 grid::grid.draw(plt)
 plt=output_graph_compare_oneMIC(MICDens_log,gx_log,MICDens_spline,gx_spline,MIC,DIA,xcens,ycens,xgrid,MICBrkpt)
 grid::grid.draw(plt)
+
+### Probability
+a1 <<- data.frame(dens=apply(MICDens_log,2,median),fit=apply(gx_log,2,median))
+tmp=probDIAClass(a1,MICBrkptL,MICBrkptU,DIASet1=c(34,39),DIASet2=c(NA,NA))
+plotProbDIAClass(tmp,MICBrkptL,MICBrkptU,DIASet1=c(24,29),DIASet2=c(NA,NA),logConvert=TRUE)
+
 
