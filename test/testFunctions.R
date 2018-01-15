@@ -97,5 +97,6 @@ grid::grid.draw(plt)
 a1 <<- data.frame(dens=apply(MICDens_log,2,median),fit=apply(gx_log,2,median))
 tmp=probDIAClass(a1,MICBrkptL,MICBrkptU,DIASet1=c(34,39),DIASet2=c(NA,NA))
 plotProbDIAClass(tmp,MICBrkptL,MICBrkptU,DIASet1=c(24,29),DIASet2=c(NA,NA),logConvert=TRUE)
+plotProbDIAClass(tmp,MICBrkptL,MICBrkptU,DIASet1=c(24,29),DIASet2=c(25,30),logConvert=TRUE)
 
 

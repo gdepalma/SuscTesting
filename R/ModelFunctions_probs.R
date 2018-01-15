@@ -199,7 +199,7 @@ plotProbDIAClass=function(a1,M1,M2,DIASet1,DIASet2,logConvert){
         theme(
           legend.position='bottom',
           legend.text = element_text(size = 16),
-          legend.title=element_text(size=15))
+          legend.title=element_text(size=15))+
         ylim(0,1)+
         scale_x_continuous(breaks = seq(round(min(xgrid)),round(max(xgrid)),by=1),limits=c(min(MIC),max(MIC)))
 
