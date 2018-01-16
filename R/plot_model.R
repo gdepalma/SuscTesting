@@ -220,7 +220,7 @@ output_graph_compare_twoMIC=function(MICDens_log,gx_log,MICDens_spline,gx_spline
 
 }
 
-output_graph_compare_oneMIC=function(MICDens_log,gx_log,MICDens_spline,gx_spline,MIC,DIA,xcens,ycens,xgrid,MICBrkpt){
+output_graph_compare_oneMIC=function(MICDens_log,gx_log,MICDens_spline,gx_spline,xobs,yobs,xcens,ycens,xgrid,MICBrkpt){
 
 
   xobs1=xobs
