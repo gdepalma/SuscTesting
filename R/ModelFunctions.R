@@ -332,16 +332,19 @@ getDIABrkptsModel_twoMIC=function(MICDens,gx,xgrid,DIA,MICBrkptL,MICBrkptU,xsig=
 
   DIA_Brkpts=matrix(NA,nrow=nrow(MICDens),ncol=2)
   for(i in 1:nrow(MICDens)){
-    parms=findDIAC(DIA,xgrid,MICDens[i,],gx[i,],MICBrkptL,MICBrkptU,xsig,ysig,minWidth,maxWidth,minDIA,maxDIA)
+    parms=findDIAC(DIA,xgrid,MICDens[i,],gx[i,],MICBrkptL,MICBrkptU,xsig,ysig,minWidth,maxWidth)
     DIA_Brkpts[i,1]=parms$D1
     DIA_Brkpts[i,2]=parms$D2
   }
-  a1=as.data.frame(table(DIA_Brkpts[,1],DIA_Brkpts[,2]))
-  names(a1)=c('DIA_L','DIA_U','Freq')
-  a1 = a1 %>% arrange(desc(Freq)) %>% mutate(Percent=format(round(Freq/sum(Freq)*100),nsmall=2),
-          CumPerc=format(round(cumsum(Freq)/sum(Freq)*100),nsmall=2)) %>%
-          dplyr::select(-Freq)
+  tmp=data.frame(DIA_L=DIA_Brkpts[,1],DIA_U=DIA_Brkpts[,2])
+  a1 = tmp %>% group_by(DIA_L,DIA_U) %>% summarize(Freq=n()) %>%
+    arrange(desc(Freq)) %>%
+    mutate(Percent=round(Freq/sum(Freq)*100,2),
+           CumPerc=round(cumsum(Freq)/sum(Freq)*100,2)) %>%
+    dplyr::select(-Freq)
+
 
   return(a1)
+
 }
 
