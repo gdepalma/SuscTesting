@@ -81,7 +81,7 @@ a1
 
 plt=output_graph_one_model_twoMIC(MICDens_log,gx_log,MIC,DIA,xcens,ycens,xgrid,MICBrkptL,MICBrkptU)
 grid::grid.draw(plt)
-plt=output_graph_one_model_oneMIC(MICDens_spline,gx_spline,MIC,DIA,xcens,ycens,xgrid,MICBrkpt)
+plt=output_graph_one_model_oneMIC(MICDens_log,gx_log,MIC,DIA,xcens,ycens,xgrid,MICBrkpt)
 grid::grid.draw(plt)
 
 
